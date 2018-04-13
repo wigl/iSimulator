@@ -35,7 +35,7 @@ You can use the following two ways:
 
 Terminal.app: **Usage: sudo xcode-select -s <path>**
 
-Xcode.app: **Preferences -> Locations -> Commond line tools**
+Xcode.app: **Preferences -> Locations -> Command line tools**
 
 ## Preview
 
