@@ -51,12 +51,7 @@ extern FBXCTestType const FBXCTestTypeListTest;
  The Default Initializer.
  This should not be called directly.
  */
-- (instancetype)initWithDestination:(FBXCTestDestination *)destination shims:(nullable FBXCTestShimConfiguration *)shims environment:(NSDictionary<NSString *, NSString *> *)environment workingDirectory:(NSString *)workingDirectory testBundlePath:(NSString *)testBundlePath waitForDebugger:(BOOL)waitForDebugger timeout:(NSTimeInterval)timeout;
-
-/**
- The Destination Runtime to run against.
- */
-@property (nonatomic, copy, readonly) FBXCTestDestination *destination;
+- (instancetype)initWithShims:(nullable FBXCTestShimConfiguration *)shims environment:(NSDictionary<NSString *, NSString *> *)environment workingDirectory:(NSString *)workingDirectory testBundlePath:(NSString *)testBundlePath waitForDebugger:(BOOL)waitForDebugger timeout:(NSTimeInterval)timeout;
 
 /**
  The Shims to use for relevant test runs.
@@ -106,6 +101,10 @@ extern FBXCTestType const FBXCTestTypeListTest;
 
 @end
 
+@class FBXCTestProcess;
+
+@protocol FBXCTestProcessExecutor;
+
 /**
  A Test Configuration, specialized to the listing of Test Bundles.
  */
@@ -114,7 +113,18 @@ extern FBXCTestType const FBXCTestTypeListTest;
 /**
  The Designated Initializer.
  */
-+ (instancetype)configurationWithDestination:(FBXCTestDestination *)destination shims:(FBXCTestShimConfiguration *)shims environment:(NSDictionary<NSString *, NSString *> *)environment workingDirectory:(NSString *)workingDirectory testBundlePath:(NSString *)testBundlePath waitForDebugger:(BOOL)waitForDebugger timeout:(NSTimeInterval)timeout;
++ (instancetype)configurationWithShims:(FBXCTestShimConfiguration *)shims environment:(NSDictionary<NSString *, NSString *> *)environment workingDirectory:(NSString *)workingDirectory testBundlePath:(NSString *)testBundlePath runnerAppPath:(nullable NSString *)runnerAppPath waitForDebugger:(BOOL)waitForDebugger timeout:(NSTimeInterval)timeout;
+
+/**
+ Start an xctest process with the given configuration.
+
+ @param environment environment variables passing to the process.
+ @param stdOutConsumer the Consumer of the launched process stdout.
+ @param stdErrConsumer the Consumer of the launched process stderr.
+ @param executor the executor for running the list test process.
+ @return the list test process
+ */
+- (FBFuture<id<FBLaunchedProcess>> *)listTestProcessWithEnvironment:(NSDictionary<NSString *, NSString *> *)environment stdOutConsumer:(id<FBFileConsumer>)stdOutConsumer stdErrConsumer:(id<FBFileConsumer>)stdErrConsumer executor:(id<FBXCTestProcessExecutor>)executor;
 
 @end
 
@@ -140,11 +150,39 @@ extern FBXCTestType const FBXCTestTypeListTest;
 @property (nonatomic, copy, readonly, nullable) NSString *testFilter;
 
 /**
+ The path of log file that we dump all os_log to.
+ (os_log means Apple's unified logging system (https://developer.apple.com/documentation/os/logging),
+ we use this name to avoid confusing between various logging systems)
+ */
+@property (nonatomic, copy, readonly, nullable) NSString *osLogPath;
+
+/**
+ The path of video recording file that record the whole test run.
+ */
+@property (nonatomic, copy, readonly, nullable) NSString *videoRecordingPath;
+
+/**
+ A list of test artifcats filename globs (see https://en.wikipedia.org/wiki/Glob_(programming) ) that
+ any files in app's container folder matching them will be copied out to a temporary path before
+ simulator is cleaned up.
+ */
+@property (nonatomic, copy, readonly, nullable) NSArray<NSString *> *testArtifactsFilenameGlobs;
+
+/**
  The Designated Initializer.
  */
-+ (instancetype)configurationWithDestination:(FBXCTestDestination *)destination environment:(NSDictionary<NSString *, NSString *> *)environment workingDirectory:(NSString *)workingDirectory testBundlePath:(NSString *)testBundlePath waitForDebugger:(BOOL)waitForDebugger timeout:(NSTimeInterval)timeout runnerAppPath:(NSString *)runnerAppPath testTargetAppPath:(nullable NSString *)testTargetAppPath testFilter:(nullable NSString *)testFilter;
++ (instancetype)configurationWithEnvironment:(NSDictionary<NSString *, NSString *> *)environment workingDirectory:(NSString *)workingDirectory testBundlePath:(NSString *)testBundlePath waitForDebugger:(BOOL)waitForDebugger timeout:(NSTimeInterval)timeout runnerAppPath:(NSString *)runnerAppPath testTargetAppPath:(nullable NSString *)testTargetAppPath testFilter:(nullable NSString *)testFilter videoRecordingPath:(nullable NSString *)videoRecordingPath testArtifactsFilenameGlobs:(nullable NSArray<NSString *> *)testArtifactsFilenameGlobs osLogPath:(nullable NSString *)osLogPath;
 
 @end
+
+typedef NS_OPTIONS(NSUInteger, FBLogicTestMirrorLogs) {
+    /* Does not mirror logs */
+    FBLogicTestMirrorNoLogs = 0,
+    /* Mirrors logs to files */
+    FBLogicTestMirrorFileLogs = 1 << 0,
+    /* Mirrors logs to logger */
+    FBLogicTestMirrorLogger = 1 << 1,
+};
 
 /**
  A Test Configuration, specialized to the running of Logic Tests.
@@ -157,9 +195,14 @@ extern FBXCTestType const FBXCTestTypeListTest;
 @property (nonatomic, copy, nullable, readonly) NSString *testFilter;
 
 /**
+ How the logic test logs will be mirrored
+ */
+@property (nonatomic, readonly) FBLogicTestMirrorLogs mirroring;
+
+/**
  The Designated Initializer.
  */
-+ (instancetype)configurationWithDestination:(FBXCTestDestination *)destination shims:(FBXCTestShimConfiguration *)shims environment:(NSDictionary<NSString *, NSString *> *)environment workingDirectory:(NSString *)workingDirectory testBundlePath:(NSString *)testBundlePath waitForDebugger:(BOOL)waitForDebugger timeout:(NSTimeInterval)timeout testFilter:(nullable NSString *)testFilter;
++ (instancetype)configurationWithShims:(FBXCTestShimConfiguration *)shims environment:(NSDictionary<NSString *, NSString *> *)environment workingDirectory:(NSString *)workingDirectory testBundlePath:(NSString *)testBundlePath waitForDebugger:(BOOL)waitForDebugger timeout:(NSTimeInterval)timeout testFilter:(nullable NSString *)testFilter mirroring:(FBLogicTestMirrorLogs)mirroring;
 
 @end
 

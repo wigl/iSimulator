@@ -7,6 +7,10 @@
 //
 
 /*
+ Update Date:
+ Commits on Apr 6, 2018
+ commit 7a42a91e7175223cbf218757b94df75ab19b51a5
+ 
  FBSimulatorEventRelay.m:102  -> NSParameterAssert(self.connection == nil);
  
  FBWeakFramework.m:358 -> return [[FBControlCoreError
@@ -36,7 +40,8 @@ class FBSimTool {
     func boot(_ udid: String) throws {
         let sims = allSimulators.filter { $0.udid == udid }
         if let sim = sims.first {
-            sim.boot()
+            let future = sim.boot()
+            try future.await(withTimeout: 20)
             try sim.focus()
         }else{
             throw NSError.init(domain: "Boot Failed!", code: -1, userInfo: nil)

@@ -10,11 +10,12 @@
 #import <Foundation/Foundation.h>
 
 #import <FBControlCore/FBApplicationCommands.h>
-#import <FBControlCore/FBLogCommands.h>
 #import <FBControlCore/FBArchitecture.h>
 #import <FBControlCore/FBBitmapStreamingCommands.h>
 #import <FBControlCore/FBDebugDescribeable.h>
 #import <FBControlCore/FBJSONConversion.h>
+#import <FBControlCore/FBLogCommands.h>
+#import <FBControlCore/FBScreenshotCommands.h>
 #import <FBControlCore/FBVideoRecordingCommands.h>
 #import <FBControlCore/FBXCTestCommands.h>
 
@@ -25,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class FBProcessInfo;
 @class FBiOSActionRouter;
 @class FBiOSTargetDiagnostics;
+@class FBiOSTargetScreenInfo;
 @protocol FBDeviceOperator;
 @protocol FBControlCoreLogger;
 
@@ -66,7 +68,7 @@ extern FBSimulatorStateString const FBSimulatorStateStringUnknown;
 /**
  Common Properties of Devices & Simulators.
  */
-@protocol FBiOSTarget <NSObject, FBJSONSerializable, FBDebugDescribeable, FBApplicationCommands, FBBitmapStreamingCommands, FBVideoRecordingCommands, FBXCTestCommands, FBLogCommands>
+@protocol FBiOSTarget <NSObject, FBJSONSerializable, FBDebugDescribeable, FBApplicationCommands, FBBitmapStreamingCommands, FBLogCommands, FBScreenshotCommands, FBVideoRecordingCommands, FBXCTestCommands>
 
 /**
  The Target's Logger.
@@ -122,6 +124,11 @@ extern FBSimulatorStateString const FBSimulatorStateStringUnknown;
  The OS Version of the Target.
  */
 @property (nonatomic, copy, readonly) FBOSVersion *osVersion;
+
+/**
+ The Screen Info for the Target.
+ */
+@property (nonatomic, copy, nullable, readonly) FBiOSTargetScreenInfo *screenInfo;
 
 /**
  Process Information about the launchd process of the iOS Target. Currently only applies to Simulators.

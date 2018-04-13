@@ -14,25 +14,20 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- Obtains the Path to the Current Xcode Install.
+ An in-memory representation of a launched process.
+ Can be inspected for completion.
  */
-@interface FBXcodeDirectory : NSObject
-
-#pragma mark Implementations
+@protocol FBLaunchedProcess <NSObject>
 
 /**
- The Xcode install path, using xcode-select(1).
+ The Process Idenfifer of the Launched Process.
  */
-@property (nonatomic, copy, class, readonly) FBXcodeDirectory *xcodeSelectFromCommandLine;
-
-#pragma mark Public Methods
+@property (nonatomic, assign, readonly) pid_t processIdentifier;
 
 /**
- Finds the file path of the Xcode install.
-
- @return a future that resolves with the path
+ A future that resolves with the exit code upon termination
  */
-- (FBFuture<NSString *> *)xcodePath;
+@property (nonatomic, strong, readonly) FBFuture<NSNumber *> *exitCode;
 
 @end
 

@@ -7,32 +7,30 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  */
 
-#import <FBSimulatorControl/FBSimulatorEventSink.h>
+#import <Foundation/Foundation.h>
 
-@class FBSimulatorProcessFetcher;
+#import <FBSimulatorControl/FBSimulatorEventSink.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- Automatically subscribes to event sources that create Simulator Events passively.
- The results of these event sources are translated into events for the relayed sink.
-
- Since passive events can duplicate those generate by FBSimulatorControl callers,
- this class also de-duplicates events.
+ An Event Sink that stores recieved events as state.
+ Then forwards these events to the provided sink, so that events are de-duplicated.
  */
-@interface FBSimulatorEventRelay : NSObject <FBSimulatorEventSink>
+@interface FBSimulatorMutableState : NSObject <FBSimulatorEventSink>
+
+#pragma mark Initializers
 
 /**
  The Designated Initializer.
 
- @param simDevice the SimDevice to relay events for.
  @param launchdProcess the Simulator's `launchd_sim` process, if booted.
  @param containerApplication the Simulator's 'Container Application' process, if applicable.
- @param processFetcher the Process Query for obtaining process information.
- @param queue the queue that events are serialized on.
  @param sink the sink to forward to.
  */
-- (instancetype)initWithSimDevice:(SimDevice *)simDevice launchdProcess:(nullable FBProcessInfo *)launchdProcess containerApplication:(nullable FBProcessInfo *)containerApplication processFetcher:(FBSimulatorProcessFetcher *)processFetcher queue:(dispatch_queue_t)queue sink:(id<FBSimulatorEventSink>)sink;
+- (instancetype)initWithLaunchdProcess:(nullable FBProcessInfo *)launchdProcess containerApplication:(nullable FBProcessInfo *)containerApplication sink:(id<FBSimulatorEventSink>)sink;
+
+#pragma mark Properties
 
 /**
  The Simulator's `launchd_sim` process, if booted.

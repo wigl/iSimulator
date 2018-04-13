@@ -29,7 +29,9 @@ extern FBiOSTargetFutureType const FBiOSTargetFutureTypeSimulatorAgent;
  This class is explicitly a reference type as it retains the File Handles that are used by the Agent Process.
  The lifecycle of the process is managed internally and this class should not be instantiated directly by consumers.
  */
-@interface FBSimulatorAgentOperation : NSObject <FBiOSTargetContinuation>
+@interface FBSimulatorAgentOperation : NSObject <FBiOSTargetContinuation, FBLaunchedProcess, FBJSONSerializable>
+
+#pragma mark Helper Methods
 
 /**
  Extracts termination information for the provided process.
@@ -39,16 +41,12 @@ extern FBiOSTargetFutureType const FBiOSTargetFutureTypeSimulatorAgent;
  */
 + (BOOL)isExpectedTerminationForStatLoc:(int)statLoc;
 
+#pragma mark Properties
+
 /**
  The Configuration Launched with.
  */
 @property (nonatomic, copy, readonly) FBAgentLaunchConfiguration *configuration;
-
-/**
- A future representation of the operation.
- The value of the future is the stat_loc value.
- */
-@property (nonatomic, strong, readonly) FBFuture<NSNumber *> *future;
 
 /**
  The stdout File Handle.
@@ -61,9 +59,16 @@ extern FBiOSTargetFutureType const FBiOSTargetFutureTypeSimulatorAgent;
 @property (nonatomic, strong, nullable, readonly) FBProcessOutput *stdErr;
 
 /**
- The Launched Process Info.
+ The Process Info of the launched process.
+ This may be nil in the event that the process was short lived and the process info could not be obtained.
  */
-@property (nonatomic, copy, readonly) FBProcessInfo *process;
+@property (nonatomic, copy, nullable, readonly) FBProcessInfo *processInfo;
+
+/**
+ A Future representation of the completion of the agent process.
+ The value of the future is the stat_loc value from waitpid(2).
+ */
+@property (nonatomic, strong, readonly) FBFuture<NSNumber *> *processStatus;
 
 @end
 
@@ -80,10 +85,10 @@ extern FBiOSTargetFutureType const FBiOSTargetFutureTypeSimulatorAgent;
  @param stdOut the Stdout output.
  @param stdErr the Stderr output.
  @param launchFuture a future that will fire when the process has launched. The value is the process identifier.
- @param terminationFuture a future that will fire when the process has terminated. The value is the exit code.
+ @param processStatusFuture a future that will fire when the process has terminated. The value is that of waitpid(2).
  @return a Future that resolves when the process is launched.
  */
-+ (FBFuture<FBSimulatorAgentOperation *> *)operationWithSimulator:(FBSimulator *)simulator configuration:(FBAgentLaunchConfiguration *)configuration stdOut:(nullable FBProcessOutput *)stdOut stdErr:(nullable FBProcessOutput *)stdErr launchFuture:(FBFuture<NSNumber *> *)launchFuture terminationFuture:(FBFuture<NSNumber *> *)terminationFuture;
++ (FBFuture<FBSimulatorAgentOperation *> *)operationWithSimulator:(FBSimulator *)simulator configuration:(FBAgentLaunchConfiguration *)configuration stdOut:(nullable FBProcessOutput *)stdOut stdErr:(nullable FBProcessOutput *)stdErr launchFuture:(FBFuture<NSNumber *> *)launchFuture processStatusFuture:(FBFuture<NSNumber *> *)processStatusFuture;
 
 @end
 

@@ -15,10 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
  A State for the Future.
  */
 typedef NS_ENUM(NSUInteger, FBFutureState) {
-  FBFutureStateRunning,  /* The Future hasn't resolved yet */
-  FBFutureStateDone,  /* The Future has resolved successfully */
-  FBFutureStateFailed,  /* The Future has resolved in error */
-  FBFutureStateCancelled,  /* The Future has been cancelled */
+  FBFutureStateRunning = 1,  /* The Future hasn't resolved yet */
+  FBFutureStateDone = 2,  /* The Future has resolved successfully */
+  FBFutureStateFailed = 3,  /* The Future has resolved in error */
+  FBFutureStateCancelled = 4,  /* The Future has been cancelled */
 };
 
 /**
@@ -173,10 +173,11 @@ typedef NS_ENUM(NSUInteger, FBFutureState) {
 /**
  Cancels the receiver if it doesn't resolve within the timeout.
 
- @param timeout to use.
- @return a new future.
+ @param timeout the amount of time to time out the receiver in
+ @param format the description of the timeout
+ @return the current future with a timeout applied.
  */
-- (FBFuture *)timedOutIn:(NSTimeInterval)timeout;
+- (FBFuture *)timeout:(NSTimeInterval)timeout waitingFor:(NSString *)format, ... NS_FORMAT_FUNCTION(2,3);
 
 /**
  Replaces the value on a successful future.
@@ -217,7 +218,7 @@ typedef NS_ENUM(NSUInteger, FBFutureState) {
  @param format the format string to re-phrase the failure message.
  @return a future with the replacement.
  */
-- (FBFuture *)rephraseFailure:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
+- (FBFuture<T> *)rephraseFailure:(NSString *)format, ... NS_FORMAT_FUNCTION(1,2);
 
 #pragma mark Properties
 
@@ -272,6 +273,14 @@ typedef NS_ENUM(NSUInteger, FBFutureState) {
  @return the reciever, for chaining.
  */
 - (instancetype)resolveWithError:(NSError *)error;
+
+/**
+ Resolve the reciever upon the completion of another future.
+
+ @param future the future to resolve from.
+ @return the reciever, for chaining.
+ */
+- (instancetype)resolveFromFuture:(FBFuture *)future;
 
 @end
 

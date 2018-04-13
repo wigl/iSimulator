@@ -41,38 +41,36 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype)initWithSimulator:(FBSimulator *)simulator framebuffer:(nullable FBFramebuffer *)framebuffer hid:(nullable FBSimulatorHID *)hid;
 
-/**
- Tears down the bridge and it's resources, waiting for any asynchronous teardown to occur before returning.
- Must only ever be called from the main thread.
-
- @param timeout the number of seconds to wait for termination to occur in. If 0 or fewer, the reciever won't wait.
- @return YES if the termination occurred within timeout seconds, NO otherwise.
- */
-- (BOOL)terminateWithTimeout:(NSTimeInterval)timeout;
+#pragma mark Connection Lifecycle
 
 /**
- Connects to the SimulatorBridge.
+ Tears down the bridge and it's resources.
+ If there is any asynchronous work that is pending, it will resolve the returned future upon completion.
 
- @param error an error out for any error that occurs.
- @return the Bridge Instance if successful, nil otherwise.
+ @return A Future that resolves when the connection has been terminated.
  */
-- (nullable FBSimulatorBridge *)connectToBridge:(NSError **)error;
+- (FBFuture<NSNull *> *)terminate;
+
+/**
+ Connects to the FBSimulatorBridge.
+
+ @return a Future wrapping the Bridge Instance if successful, nil otherwise.
+ */
+- (FBFuture<FBSimulatorBridge *> *)connectToBridge;
 
 /**
  Connects to the Framebuffer.
 
- @param error an error out for any error that occurs.
- @return the Framebuffer instance if successful, nil otherwise.
+ @return a Future that resolves with the Framebuffer instance.
  */
-- (nullable FBFramebuffer *)connectToFramebuffer:(NSError **)error;
+- (FBFuture<FBFramebuffer *> *)connectToFramebuffer;
 
 /**
  Connects to the FBSimulatorHID.
 
- @param error an error out for any error that occurs.
  @return the HID instance if successful, nil otherwise.
  */
-- (nullable FBSimulatorHID *)connectToHID:(NSError **)error;
+- (FBFuture<FBSimulatorHID *> *)connectToHID;
 
 @end
 

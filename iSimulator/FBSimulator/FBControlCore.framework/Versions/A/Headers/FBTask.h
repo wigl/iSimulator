@@ -10,10 +10,10 @@
 #import <Foundation/Foundation.h>
 
 #import <FBControlCore/FBFuture.h>
+#import <FBControlCore/FBLaunchedProcess.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol FBFileConsumer;
 @class FBTaskConfiguration;
 
 /**
@@ -24,107 +24,63 @@ extern NSString *const FBTaskErrorDomain;
 /**
  Programmatic interface to a Task.
  */
-@interface FBTask : NSObject
+@interface FBTask <StdInType : id, StdOutType : id, StdErrType : id> : NSObject <FBLaunchedProcess>
 
 #pragma mark Initializers
 
 /**
- Creates a Task with the provided configuration.
+ Creates a Task with the provided configuration and starts it.
 
  @param configuration the configuration to use
- @return a task.
+ @return a future that resolves when the task has been started.
  */
-+ (instancetype)taskWithConfiguration:(FBTaskConfiguration *)configuration;
++ (FBFuture<FBTask *> *)startTaskWithConfiguration:(FBTaskConfiguration *)configuration;
 
-#pragma mark Starting a Task
+#pragma mark Public Methods
 
 /**
- Runs the reciever, returning when the Task has completed or when the timeout is hit.
- If the timeout is reached, the process will be terminated.
+ Signal the process.
+ The future returned will resolve when the process has terminated and can be ignored if not required.
 
- @param timeout the the maximum time to evaluate the task.
- @return the reciever, for chaining.
+ @param signo the signal number to send.
+ @return a Future that resolves when the process has termintated.
  */
-- (instancetype)startSynchronouslyWithTimeout:(NSTimeInterval)timeout;
-
-/**
- Asynchronously launches the task, returning immediately after the Task has launched.
-
- @Param terminationQueue the queue to call the termination handler on.
- @param handler the handler to call when the Task has terminated.
- @return the reciever, for chaining.
- */
-- (instancetype)startAsynchronouslyWithTerminationQueue:(dispatch_queue_t)terminationQueue handler:(void (^)(FBTask *task))handler;
-
-/**
- Asynchronously launches the task, returning immediately after the Task has launched.
-
- @return the reciever, for chaining.
- */
-- (instancetype)startAsynchronously;
-
-#pragma mark Awaiting Completion
-
-/**
- Runs the reciever, returning when the Task has completed or when the timeout is hit.
- If the timeout is reached, the process will not be automatically terminated.
-
- @param timeout the the maximum time to evaluate the task.
- @return the reciever, for chaining.
- */
-- (BOOL)waitForCompletionWithTimeout:(NSTimeInterval)timeout error:(NSError **)error;
+- (FBFuture *)sendSignal:(int)signo;
 
 #pragma mark Accessors
 
 /**
+ A future that resolves with the exit code when the process has finished.
+ Cancelling this future will send a SIGTERM to the launched process.
+ Any errors will also be surfaced in this future.
+ */
+@property (nonatomic, strong, readonly) FBFuture<NSNumber *> *completed;
+
+/**
  Returns the Process Identifier of the Launched Process.
  */
-- (pid_t)processIdentifier;
+@property (nonatomic, assign, readonly) pid_t processIdentifier;
 
 /**
- Returns the Exit Code of the Process
+ Returns the stdin of the task.
+ May be called from any thread.
+ The valid types for these values are the wrapped types in FBProcessInput.
  */
-- (int)exitCode;
+@property (nonatomic, strong, nullable, readonly) StdInType stdIn;
 
 /**
- Returns a copy of the current state of stdout. May be called from any thread.
- The types of these values are defined in FBTaskConfiguration.
+ Returns the stdout of the task.
+ May be called from any thread.
+ The valid types for these values are the wrapped types in FBProcessOutput.
  */
-- (nullable id)stdOut;
+@property (nonatomic, strong, nullable, readonly) StdOutType stdOut;
 
 /**
- Returns the stdout of the process:
- The types of these values are defined in FBTaskConfiguration.
+ Returns the stdout of the task.
+ May be called from any thread.
+ The valid types for these values are the wrapped types in FBProcessOutput.
  */
-- (nullable id)stdErr;
-
-/**
- Returns a consumer for the stdin.
- This will only exist if:
- - The Task is Configured to do so.
- - The Task is running.
- */
-- (nullable id<FBFileConsumer>)stdIn;
-
-/**
- Returns the Error associated with the task (if any). May be called from any thread.
- */
-- (nullable NSError *)error;
-
-/**
- Cancels the Task.
- */
-- (void)terminate;
-
-/**
- Returns YES if the task has terminated, NO otherwise.
- */
-- (BOOL)hasTerminated;
-
-/**
- Returns YES if the task terminated without an error, NO otherwise
- */
-- (BOOL)wasSuccessful;
+@property (nonatomic, strong, nullable, readonly) StdErrType stdErr;
 
 @end
 

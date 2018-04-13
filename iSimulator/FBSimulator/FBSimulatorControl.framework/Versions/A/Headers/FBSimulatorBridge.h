@@ -10,28 +10,28 @@
 #import <Foundation/Foundation.h>
 
 #import <FBControlCore/FBControlCore.h>
+#import <FBSimulatorControl/FBSimulatorBridgeCommands.h>
+
+NS_ASSUME_NONNULL_BEGIN
 
 @class FBApplicationLaunchConfiguration;
 @class FBSimulator;
 
-NS_ASSUME_NONNULL_BEGIN
-
 /**
  Wraps the 'SimulatorBridge' Connection and Protocol
  */
-@interface FBSimulatorBridge : NSObject <FBJSONSerializable>
+@interface FBSimulatorBridge : NSObject <FBJSONSerializable, FBSimulatorBridgeCommands>
 
 #pragma mark Initializers
 
 /**
  Creates and Returns a SimulatorBridge for the attaching to the provided Simulator.
- Fails if the connection could not established.
+ The future will fail if the connection could not established.
 
  @param simulator the Simulator to attach to.
- @param error an error out for any error that occurs.
- @return a FBSimulatorBridge object on success, nil otherwise.
+ @return a FBSimulatorBridge wrapped in a Future.
  */
-+ (nullable instancetype)bridgeForSimulator:(FBSimulator *)simulator error:(NSError **)error;
++ (FBFuture<FBSimulatorBridge *> *)bridgeForSimulator:(FBSimulator *)simulator;
 
 /**
  Should be called when the connection to the remote bridge should be disconnected.
@@ -41,21 +41,29 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark Interacting with the Simulator
 
 /**
- The Acessibility Elements.
+ Enables Accessibility on the Simulator.
 
- @return the Available Accessibility Elements.
+ @return a future that resolves when accessibility has been enabled.
  */
-- (NSArray<NSDictionary<NSString *, id> *> *)accessibilityElements;
+- (FBFuture<NSNull *> *)enableAccessibility;
 
 /**
- Sets latitude and longitude of the Simulator.
- The behaviour of a directly-launched Simulator differs from Simulator.app slightly, in that the location isn't automatically set.
- Simulator.app will typically set a location from NSUserDefaults, so Applications will have a default location.
+ The Acessibility Elements.
+ Obtain the acessibility elements for the main screen.
+ The returned value is fully JSON serializable.
 
- @param latitude the latitude of the location.
- @param longitude the longitude of the location.
+ @return the accessibility elements for the main screen, wrapped in a Future.
  */
-- (void)setLocationWithLatitude:(double)latitude longitude:(double)longitude;
+- (FBFuture<NSArray<NSDictionary<NSString *, id> *> *> *)accessibilityElements;
+
+/**
+ Obtain the acessibility element for the main screen at the given point.
+ The returned value is fully JSON serializable.
+
+ @param point the coordinate at which to obtain the accessibility element.
+ @return the accessibility element at the provided point, wrapped in a Future.
+ */
+- (FBFuture<NSDictionary<NSString *, id> *> *)accessibilityElementAtPoint:(CGPoint)point;
 
 /**
  Launches an Application.
@@ -63,9 +71,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param configuration the Configuration of the App to Launch,
  @param stdOutPath the Path of a File to write stdout to.
  @param stdErrPath the path of a File to write stderr to.
- @return the Process Identifeir of the Launched Application if successful, -1 otherwise.
+ @return the Process Identifier of the Launched Application if successful wrapped in a Future.
  */
-- (pid_t)launch:(FBApplicationLaunchConfiguration *)configuration stdOutPath:(nullable NSString *)stdOutPath stdErrPath:(nullable NSString *)stdErrPath error:(NSError **)error;
+- (FBFuture<NSNumber *> *)launch:(FBApplicationLaunchConfiguration *)configuration stdOutPath:(nullable NSString *)stdOutPath stdErrPath:(nullable NSString *)stdErrPath;
 
 @end
 

@@ -125,6 +125,47 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)testCase:(NSString *)testClass method:(NSString *)method didFinishActivity:(FBActivityRecord *)activity;
 
+/**
+ Called when a test case has finished
+
+ @note This will be called instead of testCaseDidFinishForTestClass:method:withStatus:duration:logs: if implemented
+ @param testClass the test class that has finished.
+ @param method the test method that has finished.
+ @param status the status of the finish of the test case.
+ @param duration the duration of the test case.
+ @param logs the logs from the test case.
+ */
+- (void)testCaseDidFinishForTestClass:(NSString *)testClass method:(NSString *)method withStatus:(FBTestReportStatus)status duration:(NSTimeInterval)duration logs:(nullable NSArray *)logs;
+
+/**
+ Called when the test plan fails for some global issue not specific to any one test
+
+ @param message the failure message.
+ */
+- (void)testPlanDidFailWithMessage:(nonnull NSString *) message;
+
+/**
+ Called after finished a video recording during test run.
+
+ @param videoRecordingPath the file path of video recording
+ */
+- (void)didRecordVideoAtPath:(nonnull NSString *)videoRecordingPath;
+
+/**
+ Called after saving os_log during test run.
+
+ @param osLogPath the file path of os log
+ */
+- (void)didSaveOSLogAtPath:(nonnull NSString *)osLogPath;
+
+/**
+ Called after copy a test artifacts out of simulator's folder.
+
+ @param testArtifactFilename the file name of the test artifacts.
+ @param path the new path that the test artifact is copied to.
+ */
+- (void)didCopiedTestArtifact:(nonnull NSString *)testArtifactFilename toPath:(nonnull NSString *)path;
+
 @end
 
 NS_ASSUME_NONNULL_END

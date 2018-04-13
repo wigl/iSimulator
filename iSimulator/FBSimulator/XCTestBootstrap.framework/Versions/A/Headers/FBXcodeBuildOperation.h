@@ -18,43 +18,26 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol FBiOSTarget;
 
 /**
- An Xcode Build Operation.
+ Builds an xcodebuild invocation as a subprocess.
  */
-@interface FBXcodeBuildOperation : NSObject <FBiOSTargetContinuation>
+@interface FBXcodeBuildOperation : NSObject
 
 #pragma mark Initializers
 
 /**
  The Designated Initializer.
 
- @param target the target to build an operation for.
+ @param udid the udid of the target.
  @param configuration the configuration to use.
  @param xcodeBuildPath the path to xcodebuild.
  @param testRunFilePath the path to the xcodebuild.xctestrun file
- @return a build operation.
+ @param queue the queue to use for serialization.
+ @param logger the logger to log to.
+ @return a future that resolves when the task has launched.
  */
-+ (instancetype)operationWithTarget:(id<FBiOSTarget>)target configuration:(FBTestLaunchConfiguration *)configuration xcodeBuildPath:(NSString *)xcodeBuildPath testRunFilePath:(NSString *)testRunFilePath;
++ (FBFuture<FBTask *> *)operationWithUDID:(NSString *)udid configuration:(FBTestLaunchConfiguration *)configuration xcodeBuildPath:(NSString *)xcodeBuildPath testRunFilePath:(NSString *)testRunFilePath queue:(dispatch_queue_t)queue logger:(nullable id<FBControlCoreLogger>)logger;
 
 #pragma mark Public Methods
-
-/**
- Terminates all reparented xcodebuild processes.
-
- @param target the target to obtain processes for.
- @param processFetcher the process fetcher.
- @param error an error out for any error that occurs.
- @return YES if successful, NO otherwise.
- */
-+ (BOOL)terminateReparentedXcodeBuildProcessesForTarget:(id<FBiOSTarget>)target processFetcher:(FBProcessFetcher *)processFetcher error:(NSError **)error;
-
-/**
- Runs the reciever, returning when the Task has completed or when the timeout is hit.
- If the timeout is reached, the process will not be automatically terminated.
-
- @param timeout the the maximum time to evaluate the task.
- @return the reciever, for chaining.
- */
-- (BOOL)waitForCompletionWithTimeout:(NSTimeInterval)timeout error:(NSError **)error;
 
 /**
  The xctest.xctestrun properties for a test launch.
@@ -63,6 +46,17 @@ NS_ASSUME_NONNULL_BEGIN
  @return the xctest.xctestrun properties.
  */
 + (NSDictionary<NSString *, NSDictionary<NSString *, NSObject *> *> *)xctestRunProperties:(FBTestLaunchConfiguration *)testLaunch;
+
+/**
+ Terminates all reparented xcodebuild processes.
+
+ @param udid the udid of the target.
+ @param processFetcher the process fetcher to use.
+ @param queue the termination queue
+ @param logger a logger to log to.
+ @return a Future that resolves when processes have exited.
+ */
++ (FBFuture<NSArray<FBProcessInfo *> *> *)terminateAbandonedXcodebuildProcessesForUDID:(NSString *)udid processFetcher:(FBProcessFetcher *)processFetcher queue:(dispatch_queue_t)queue logger:(id<FBControlCoreLogger>)logger;
 
 @end
 

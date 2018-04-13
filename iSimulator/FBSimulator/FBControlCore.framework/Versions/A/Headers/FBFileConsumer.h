@@ -13,6 +13,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@protocol FBControlCoreLogger;
+
 /**
  A Consumer of a File's Data.
  */
@@ -33,9 +35,100 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 /**
+ A specialization of a FBFileConsumer that can expose lifecycle with a Future.
+ */
+@protocol FBFileConsumerLifecycle <FBFileConsumer>
+
+/**
+ A Future that resolves when an EOF has been recieved.
+ This is helpful for ensuring that all consumer lines have been drained.
+ */
+@property (nonatomic, strong, readonly) FBFuture<NSNull *> *eofHasBeenReceived;
+
+@end
+
+/**
+ The Non-mutating methods of a line reader.
+ */
+@protocol FBAccumulatingLineBuffer <FBFileConsumerLifecycle>
+
+/**
+ Obtains a copy of the current output data.
+ */
+- (NSData *)data;
+
+/**
+ Obtains a copy of the current output data.
+ */
+- (NSArray<NSString *> *)lines;
+
+@end
+
+/**
+ The Mutating Methods of a line reader.
+ */
+@protocol FBConsumableLineBuffer <FBFileConsumerLifecycle, FBAccumulatingLineBuffer>
+
+/**
+ Consume the remainder of the buffer available, returning it as Data.
+ This will flush the entirity of the buffer.
+ */
+- (nullable NSData *)consumeCurrentData;
+
+/**
+ Consume the remainder of the buffer available, returning it as a String.
+ This will flush the entirity of the buffer.
+ */
+- (nullable NSString *)consumeCurrentString;
+
+/**
+ Consume a line if one is available, returning it as Data.
+ This will flush the buffer of the lines that are consumed.
+ */
+- (nullable NSData *)consumeLineData;
+
+/**
+ Consume a line if one is available, returning it as a String.
+ This will flush the buffer of the lines that are consumed.
+ */
+- (nullable NSString *)consumeLineString;
+
+@end
+
+/**
+ Implementations of a line buffers.
+ This can then be consumed based on lines/strings.
+ Writes and reads are fully synchronized.
+ */
+@interface FBLineBuffer : NSObject
+
+/**
+ A line buffer that is only mutated through consuming data.
+
+ @return a FBLineBuffer implementation.
+ */
++ (id<FBAccumulatingLineBuffer>)accumulatingBuffer;
+
+/**
+ A line buffer that is only mutated through consuming data.
+
+ @return a FBLineBuffer implementation.
+ */
++ (id<FBAccumulatingLineBuffer>)accumulatingBufferForMutableData:(NSMutableData *)data;
+
+/**
+ A line buffer that is appended to by consuming data and can be drained.
+
+ @return a FBConsumableLineBuffer implementation.
+ */
++ (id<FBConsumableLineBuffer>)consumableBuffer;
+
+@end
+
+/**
  A Reader of Text Data, calling the callback when a full line is available.
  */
-@interface FBLineFileConsumer : NSObject <FBFileConsumer>
+@interface FBLineFileConsumer : NSObject <FBFileConsumer, FBFileConsumerLifecycle>
 
 /**
  Creates a Consumer of lines from a block.
@@ -73,58 +166,31 @@ NS_ASSUME_NONNULL_BEGIN
  @param consumer the block to call when a line has been consumed.
  @return a new Line Reader.
  */
-+ (instancetype)asynchronousReaderWithQueue:(dispatch_queue_t)queue dataConsumer:(void (^)(NSData *_Nonnull))consumer;
-
-/**
- A Future that resolves when an EOF has been recieved.
- This is helpful for ensuring that all consumer lines have been drained.
- */
-@property (nonatomic, strong, readonly) FBFuture<NSNull *> *eofHasBeenReceived;
++ (instancetype)asynchronousReaderWithQueue:(dispatch_queue_t)queue dataConsumer:(void (^)(NSData *))consumer;
 
 @end
 
 /**
- A Reader that accumilates data.
+ A consumer that does nothing with the data.
  */
-@interface FBAccumilatingFileConsumer : NSObject <FBFileConsumer>
+@interface FBLoggingFileConsumer : NSObject <FBFileConsumer>
 
 /**
- Initializes the reader with empty data.
-
- @return a new Data Reader.
+ The Designated Initializer
  */
-- (instancetype)init;
++ (instancetype)consumerWithLogger:(id<FBControlCoreLogger>)logger;
 
 /**
- Initializes the reader with provided data.
-
- @param data the data to append to.
- @return a new Data Reader.
+ The wrapped logger.
  */
-- (instancetype)initWithMutableData:(NSMutableData *)data;
-
-/**
- Obtains a copy of the current output data.
- */
-@property (atomic, copy, readonly) NSData *data;
-
-/**
- Obtains a copy of the current output data.
- */
-@property (atomic, copy, readonly) NSArray<NSString *> *lines;
-
-/**
- A Future that resolves when an EOF has been recieved.
- This is helpful for ensuring that all consumer lines have been drained.
- */
-@property (nonatomic, strong, readonly) FBFuture<NSNull *> *eofHasBeenReceived;
+@property (nonatomic, strong, readonly) id<FBControlCoreLogger> logger;
 
 @end
 
 /**
  A Composite Consumer.
  */
-@interface FBCompositeFileConsumer : NSObject <FBFileConsumer>
+@interface FBCompositeFileConsumer : NSObject <FBFileConsumer, FBFileConsumerLifecycle>
 
 /**
  A Consumer of Consumers.

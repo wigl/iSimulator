@@ -83,9 +83,9 @@ extern FBApplicationInstallInfoKey const FBApplicationInstallInfoKeyBundleIdenti
 @property (nonatomic, assign, readonly) FBApplicationInstallType installType;
 
 /**
- The Install Type of the Application.
+ The data container path of the Application.
  */
-@property (nonatomic, assign, nullable, readonly) NSString *dataContainer;
+@property (nonatomic, copy, nullable, readonly) NSString *dataContainer;
 
 #pragma mark Install Type
 

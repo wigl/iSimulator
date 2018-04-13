@@ -13,13 +13,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class FBProcessOutput;
-@class FBSimulator;
-
 /**
- FBSimulatorControl extensions to FBAgentLaunchConfiguration.
+ Device Implementation for Screenshots
  */
-@interface FBAgentLaunchConfiguration (Simulator) <FBiOSTargetFuture>
+@interface FBDeviceScreenshotCommands : NSObject <FBScreenshotCommands>
 
 @end
 

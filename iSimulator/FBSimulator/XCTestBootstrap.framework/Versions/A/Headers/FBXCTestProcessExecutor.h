@@ -15,43 +15,28 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class FBXCTestProcess;
 
-/**
- Identifies an xctest process.
- */
-@interface FBXCTestProcessInfo : NSObject
-
-/**
- The Designated Initializer.
-
- @param processIdentifier the process identifier.
- @param completion a future that resolves with the exit code when completed.
- */
-- (instancetype)initWithProcessIdentifier:(pid_t)processIdentifier completion:(FBFuture<NSNumber *> *)completion;
-
-/**
- The Process Idenfifer of the Launched Process.
- */
-@property (nonatomic, assign, readonly) pid_t processIdentifier;
-
-/**
- The Completion Future, the value is the exit code.
- */
-@property (nonatomic, assign, readonly) FBFuture<NSNumber *> *completion;
-
-@end
+@protocol FBFileConsumer;
 
 /**
  A protocol for defining the platform-specific implementation of running an xctest process.
  */
 @protocol FBXCTestProcessExecutor <NSObject>
 
+#pragma mark Methods
+
 /**
  Starts the xctest process.
 
- @param process the process to execute.
- @return an FBXCTestProcessInfo identifying the process.
+ @return an FBLaunchedProcess identifying the process.
  */
-- (FBFuture<FBXCTestProcessInfo *> *)startProcess:(FBXCTestProcess *)process;
+- (FBFuture<id<FBLaunchedProcess>> *)startProcessWithLaunchPath:(NSString *)launchPath arguments:(NSArray<NSString *> *)arguments environment:(NSDictionary<NSString *, NSString *> *)environment stdOutConsumer:(id<FBFileConsumer>)stdOutConsumer stdErrConsumer:(id<FBFileConsumer>)stdErrConsumer;
+
+#pragma mark Properties
+
+/**
+ The Path to the xctest executable.
+ */
+@property (nonatomic, copy, readonly) NSString *xctestPath;
 
 /**
  The path to the Shim dylib used for reporting test output.
