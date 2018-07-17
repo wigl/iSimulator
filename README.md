@@ -51,7 +51,7 @@ Xcode.app: **Preferences -> Locations -> Command line tools**
 
 ## Usage
 
-[Download](https://github.com/wigl/iSimulator/releases/download/v1.0/iSimulator.app.zip) App and run.
+[Download](https://github.com/wigl/iSimulator/releases/download/1.0/iSimulator.app.zip) App and run.
 
 ## License
 
