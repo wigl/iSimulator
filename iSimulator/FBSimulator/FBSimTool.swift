@@ -6,16 +6,6 @@
 //  Copyright © 2017年 niels.jin. All rights reserved.
 //
 
-/*
- Update Date:
- Commits on Apr 6, 2018
- commit 7a42a91e7175223cbf218757b94df75ab19b51a5
- 
- FBSimulatorEventRelay.m:102  -> NSParameterAssert(self.connection == nil);
- 
- FBWeakFramework.m:358 -> return [[FBControlCoreError
- */
-
 import Foundation
 import FBSimulatorControl
 
