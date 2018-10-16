@@ -102,7 +102,7 @@ public class FileWatch {
     
     public typealias EventHandler = (Event) -> Void
     
-    open let eventHandler: EventHandler
+    public let eventHandler: EventHandler
     private var eventStream: FSEventStreamRef?
     
     public init(paths: [String], createFlag: CreateFlag, runLoop: RunLoop, latency: CFTimeInterval, eventHandler: @escaping EventHandler) throws {

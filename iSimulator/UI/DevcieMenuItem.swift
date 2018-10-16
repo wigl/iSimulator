@@ -15,7 +15,7 @@ class DeviceMenuItem: NSMenuItem {
         self.device = device
         isEmptyApp = !device.applications.isEmpty
         super.init(title: device.name, action: nil, keyEquivalent: "")
-        self.onStateImage = NSImage.init(named: NSImage.Name.statusAvailable)
+        self.onStateImage = NSImage.init(named: NSImage.statusAvailableName)
         self.offStateImage = nil
         self.state = device.state == .shutdown ? .off : .on
         self.submenu = NSMenu()
@@ -211,7 +211,7 @@ class DeviceEraseAction: DeviceActionable {
         let prefixStr = "This action will make device reset to its initial state.\n The device udid:\n"
         let udidStr = device.udid
         let att = NSMutableAttributedString(string: prefixStr + udidStr)
-        att.addAttributes([NSAttributedStringKey.font: NSFont.boldSystemFont(ofSize: 11)], range: NSRange(location: prefixStr.count, length: udidStr.count))
+        att.addAttributes([NSAttributedString.Key.font: NSFont.boldSystemFont(ofSize: 11)], range: NSRange(location: prefixStr.count, length: udidStr.count))
         textView.textStorage?.append(att)
         alert.accessoryView = textView
         alert.alertStyle = .critical
@@ -252,7 +252,7 @@ class DeviceDeleteAction: DeviceActionable {
         let prefixStr = "All of the installed content and settings in this simulator will also be deleted.\n The device udid:\n"
         let udidStr = device.udid
         let att = NSMutableAttributedString(string: prefixStr + udidStr)
-        att.addAttributes([NSAttributedStringKey.font: NSFont.boldSystemFont(ofSize: 11)], range: NSRange(location: prefixStr.count, length: udidStr.count))
+        att.addAttributes([NSAttributedString.Key.font: NSFont.boldSystemFont(ofSize: 11)], range: NSRange(location: prefixStr.count, length: udidStr.count))
         textView.textStorage?.append(att)
         alert.accessoryView = textView
         alert.alertStyle = .critical

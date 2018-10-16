@@ -28,12 +28,30 @@
 		29AFDFCC1FBD339000544CE5 /* DeviceTypeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AFDFCB1FBD339000544CE5 /* DeviceTypeItem.swift */; };
 		29B227BA1FBD7B9F00BDE5BF /* PreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B227B91FBD7B9F00BDE5BF /* PreferencesViewController.swift */; };
 		29B591981F581513006CDEC0 /* FileWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B591971F581513006CDEC0 /* FileWatch.swift */; };
-		3193D56120FD8BFA00ADEBA1 /* ObjectMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3193D55B20FCC76100ADEBA1 /* ObjectMapper.framework */; };
-		3193D56320FD8C1300ADEBA1 /* FBDeviceControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3193D56220FD8C1300ADEBA1 /* FBDeviceControl.framework */; };
-		3193D56520FD8C1F00ADEBA1 /* FBSimulatorControl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3193D56420FD8C1F00ADEBA1 /* FBSimulatorControl.framework */; };
-		3193D56720FD8C3700ADEBA1 /* XCTestBootstrap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3193D56620FD8C3700ADEBA1 /* XCTestBootstrap.framework */; };
-		3193D56920FD8C7800ADEBA1 /* FBControlCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3193D56820FD8C7800ADEBA1 /* FBControlCore.framework */; };
+		318EA91F217607E4002523C6 /* FBControlCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3193D56820FD8C7800ADEBA1 /* FBControlCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		318EA922217607EC002523C6 /* XCTestBootstrap.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3193D56620FD8C3700ADEBA1 /* XCTestBootstrap.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		318EA924217607F0002523C6 /* FBDeviceControl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3193D56220FD8C1300ADEBA1 /* FBDeviceControl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		318EA926217607F4002523C6 /* FBSimulatorControl.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3193D56420FD8C1F00ADEBA1 /* FBSimulatorControl.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		318EA928217607F8002523C6 /* ObjectMapper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3193D55B20FCC76100ADEBA1 /* ObjectMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		318EA920217607E5002523C6 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				318EA922217607EC002523C6 /* XCTestBootstrap.framework in Embed Frameworks */,
+				318EA926217607F4002523C6 /* FBSimulatorControl.framework in Embed Frameworks */,
+				318EA928217607F8002523C6 /* ObjectMapper.framework in Embed Frameworks */,
+				318EA91F217607E4002523C6 /* FBControlCore.framework in Embed Frameworks */,
+				318EA924217607F0002523C6 /* FBDeviceControl.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2905C37B1FDA5FA700DD50B1 /* FBSimTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FBSimTool.swift; sourceTree = "<group>"; };
@@ -71,11 +89,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3193D56920FD8C7800ADEBA1 /* FBControlCore.framework in Frameworks */,
-				3193D56720FD8C3700ADEBA1 /* XCTestBootstrap.framework in Frameworks */,
-				3193D56520FD8C1F00ADEBA1 /* FBSimulatorControl.framework in Frameworks */,
-				3193D56320FD8C1300ADEBA1 /* FBDeviceControl.framework in Frameworks */,
-				3193D56120FD8BFA00ADEBA1 /* ObjectMapper.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,7 +195,7 @@
 				292EAD9C1F458B3D009FC1ED /* Sources */,
 				292EAD9D1F458B3D009FC1ED /* Frameworks */,
 				292EAD9E1F458B3D009FC1ED /* Resources */,
-				3193D55120FCC67700ADEBA1 /* ShellScript */,
+				318EA920217607E5002523C6 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -200,7 +213,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = niels.jin;
 				TargetAttributes = {
 					292EAD9F1F458B3D009FC1ED = {
@@ -243,32 +256,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		3193D55120FCC67700ADEBA1 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/Mac/ObjectMapper.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/FBControlCore.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/FBDeviceControl.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/FBSimulatorControl.framework",
-				"$(SRCROOT)/Carthage/Build/Mac/XCTestBootstrap.framework",
-			);
-			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/ObjectMapper.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FBControlCore.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FBDeviceControl.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FBSimulatorControl.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/XCTestBootstrap.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		292EAD9C1F458B3D009FC1ED /* Sources */ = {
@@ -325,6 +312,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -332,6 +320,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -381,6 +370,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -388,6 +378,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -436,7 +427,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Debug;
 		};
@@ -460,7 +451,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 			};
 			name = Release;
 		};
