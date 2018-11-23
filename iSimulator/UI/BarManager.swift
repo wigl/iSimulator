@@ -183,7 +183,7 @@ class BarManager {
         }else{
             PreferencesWindowController.firstTabSelectIdentifier = "General"
         }
-        preferenceWindowController = NSStoryboard.init(name: NSStoryboard.Name(rawValue: "Main"), bundle: nil).instantiateController(withIdentifier: NSStoryboard.SceneIdentifier(rawValue: "Preferences")) as? NSWindowController
+        preferenceWindowController = NSStoryboard.init(name: "Main", bundle: nil).instantiateController(withIdentifier: "Preferences") as? NSWindowController
         NSApp.activate(ignoringOtherApps: true)
         preferenceWindowController?.window?.makeKeyAndOrderFront(NSApplication.shared)
     }

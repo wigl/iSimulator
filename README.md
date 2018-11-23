@@ -3,9 +3,10 @@
 iSimulator is a GUI utility to control the Simulator, and manage the app installed on the simulator.
 
 - [Features](#features)
+- [Usage](#usage)
+- [Build from the code](#build-from-the-code)
 - [Requirements](#requirements)
 - [Preview](#preview)
-- [Usage](#usage)
 - [License](#license)
 
 ## Features
@@ -28,6 +29,17 @@ iSimulator is a GUI utility to control the Simulator, and manage the app install
 
 - [x] If you add, delete a simulator, or add, delete an application etc.,iSimulator will automatically refresh.
 
+## Usage
+
+Download [App](https://github.com/wigl/iSimulator/releases/download/2.0/iSimulator.app.zip) and run.
+
+## Build from the code
+
+Don't use `carthage bootstrap`, because `FBSimulatorControl` have extra scheme that carthage can not build.
+ 
+Please run script with the following:`./carthageBootstrap.sh` to checkout and build dependencies.
+
+
 ## Requirements
 
 iSimulator depends on Xcode command line tools, if you do not see the simulator you want, please change the path to the active developer directory.
@@ -48,10 +60,6 @@ Xcode.app: **Preferences -> Locations -> Command line tools**
 
 <img src="https://raw.githubusercontent.com/wigl/iSimulator/master/preview/share.jpg" alt="Launch one application for other simulator." style="width: 300px;"/>
 
-
-## Usage
-
-[Download](https://github.com/wigl/iSimulator/releases/download/1.0/iSimulator.app.zip) App and run.
 
 ## License
 

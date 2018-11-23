@@ -27,8 +27,8 @@ class Application {
         let name = "\(self.bundleDisplayName) - \(self.bundleShortVersion)(\(self.bundleVersion))"
         let other = "\n\(self.bundleID)"
         let att = NSMutableAttributedString(string: name + other)
-        att.addAttributes([NSAttributedStringKey.font: NSFont.systemFont(ofSize: 13)], range: NSRange(location: 0, length: name.count))
-        att.addAttributes([NSAttributedStringKey.font: NSFont.systemFont(ofSize: 11), NSAttributedStringKey.foregroundColor: NSColor.lightGray], range: NSRange(location: name.count, length: other.count))
+        att.addAttributes([NSAttributedString.Key.font: NSFont.systemFont(ofSize: 13)], range: NSRange(location: 0, length: name.count))
+        att.addAttributes([NSAttributedString.Key.font: NSFont.systemFont(ofSize: 11), NSAttributedString.Key.foregroundColor: NSColor.lightGray], range: NSRange(location: name.count, length: other.count))
         return att
     }()
     
@@ -70,7 +70,7 @@ class Application {
         }
         if let imageStr = iconFiles?.last,
             let bundle = Bundle(url: appUrl),
-            let im = bundle.image(forResource: NSImage.Name(rawValue: imageStr)) {
+            let im = bundle.image(forResource: imageStr) {
             originImage = im
             image = im.appIcon()
         }else{
