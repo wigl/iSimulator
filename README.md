@@ -36,8 +36,8 @@ Download [App](https://github.com/wigl/iSimulator/releases/download/2.0/iSimulat
 ## Build from the code
 
 Don't use `carthage bootstrap`, because `FBSimulatorControl` have extra scheme that carthage can not build.
-
-Please run `./carthageBootstrap.sh` to checkout and build dependencies.
+ 
+Please run script with the following:`./carthageBootstrap.sh` to checkout and build dependencies.
 
 
 ## Requirements
