@@ -4,7 +4,7 @@ iSimulator is a GUI utility to control the Simulator, and manage the app install
 
 - [Features](#features)
 - [Usage](#usage)
-- [Build from the code](#Build from the code)
+- [Build from the code](#build-from-the-code)
 - [Requirements](#requirements)
 - [Preview](#preview)
 - [License](#license)
