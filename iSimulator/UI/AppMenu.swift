@@ -187,7 +187,7 @@ protocol AppActionableExt: AppActionable {
 extension AppActionableExt {
     
     var appPath: String? {
-        return NSWorkspace.shared.absolutePathForApplication(withBundleIdentifier: appBundleIdentifier)
+        return self.path(forBundleIdentifier: appBundleIdentifier)
     }
     
     var icon: NSImage? {
@@ -201,6 +201,10 @@ extension AppActionableExt {
     
     var isAvailable: Bool {
         return appPath != nil
+    }
+    
+    func path(forBundleIdentifier bundleIdentifier: String) -> String? {
+        return NSWorkspace.shared.absolutePathForApplication(withBundleIdentifier: bundleIdentifier)
     }
     
 }
@@ -219,14 +223,21 @@ class AppRealmAction: AppActionableExt {
     }
     var title: String = "Open Realm Database"
     var appBundleIdentifier: String = "io.realm.realmbrowser" //com.googlecode.iterm2
+    var alternativeAppBundleIdentifier: String = "io.realm.realm-studio"
     var realmPath: String?
     @objc func perform() {
-        if let path =  realmPath {
+        guard let path = realmPath else {
+            return
+        }
+        if self.path(forBundleIdentifier: self.appBundleIdentifier) != nil {
             NSWorkspace.shared.openFile(path, withApplication: "Realm Browser")
+        } else if self.path(forBundleIdentifier: self.alternativeAppBundleIdentifier) != nil {
+            NSWorkspace.shared.openFile(path, withApplication: "Realm Studio")
         }
     }
     var isAvailable: Bool {
-        return appPath != nil && realmPath != nil
+        return (appPath != nil || self.path(forBundleIdentifier: self.alternativeAppBundleIdentifier) != nil)
+            && realmPath != nil
     }
 }
 
