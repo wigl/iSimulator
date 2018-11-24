@@ -42,6 +42,7 @@
 		3198339521A7F5FF004ADEE3 /* ObjectMapper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3198338821A7F5FE004ADEE3 /* ObjectMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3198339621A7F5FF004ADEE3 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3198338921A7F5FE004ADEE3 /* Crashlytics.framework */; };
 		3198339721A7F5FF004ADEE3 /* Crashlytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3198338921A7F5FE004ADEE3 /* Crashlytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		319833E021A94EDF004ADEE3 /* CrashlyticsReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319833DF21A94EDF004ADEE3 /* CrashlyticsReport.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -95,6 +96,7 @@
 		3198338721A7F5FE004ADEE3 /* FBSimulatorControl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSimulatorControl.framework; path = Carthage/Build/Mac/FBSimulatorControl.framework; sourceTree = "<group>"; };
 		3198338821A7F5FE004ADEE3 /* ObjectMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ObjectMapper.framework; path = Carthage/Build/Mac/ObjectMapper.framework; sourceTree = "<group>"; };
 		3198338921A7F5FE004ADEE3 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Carthage/Build/Mac/Crashlytics.framework; sourceTree = "<group>"; };
+		319833DF21A94EDF004ADEE3 /* CrashlyticsReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashlyticsReport.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,6 +132,7 @@
 				293B2D3F1F4E9FF00009DA18 /* NSImage+Extension.swift */,
 				298B2DB61F5549B200D73AFA /* SKQueue.swift */,
 				29B591971F581513006CDEC0 /* FileWatch.swift */,
+				319833DF21A94EDF004ADEE3 /* CrashlyticsReport.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -320,6 +323,7 @@
 				29157C5C1F4D66110069BDB6 /* Runtime.swift in Sources */,
 				29B227BA1FBD7B9F00BDE5BF /* PreferencesViewController.swift in Sources */,
 				298B2DB71F5549B200D73AFA /* SKQueue.swift in Sources */,
+				319833E021A94EDF004ADEE3 /* CrashlyticsReport.swift in Sources */,
 				29157C5E1F4D66220069BDB6 /* Device.swift in Sources */,
 				291157AE1FB5501C000EE94F /* DevcieMenuItem.swift in Sources */,
 				29B591981F581513006CDEC0 /* FileWatch.swift in Sources */,
