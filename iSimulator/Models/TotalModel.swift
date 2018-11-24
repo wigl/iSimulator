@@ -58,6 +58,7 @@ class TotalModel: Mappable {
             NSWorkspace.shared.setIcon(#imageLiteral(resourceName: "linkDirectory"), forFile: Device.linkURL.path, options:[])
         }
         let jsonStr = shell("/usr/bin/xcrun", arguments: "simctl", "list", "-j").0
+        LogReport.default.currentSimctlListJsonStr = jsonStr
         _ = Mapper().map(JSONString: jsonStr, toObject: TotalModel.default)
     }
     
@@ -66,7 +67,7 @@ class TotalModel: Mappable {
         return runtimes.filter{$0.name.contains(osType.rawValue)}
     }
     
-    var devicetypes: [DeviceType] = []
+    private var devicetypes: [DeviceType] = []
     var iOSDevicetypes: [DeviceType] {
         return devicetypes.filter{$0.name.contains("iPhone") || $0.name.contains("iPad")}
     }
@@ -131,9 +132,14 @@ class TotalModel: Mappable {
                 }
                 return false
             })
-            if let phone = phoneDevices.first, let watch = watchDevices.first{
-                watch.pairUDID = key
-                phone.pair.append(watch)
+            if let phone = phoneDevices.first, let watch = watchDevices.first {
+                if watch.runtime == nil || phone.runtime == nil {
+                    //上报错误
+                    LogReport.default.runtimeNilReport()
+                } else {
+                    watch.pairUDID = key
+                    phone.pair.append(watch)
+                }
             }
         }
         // 更新缓存

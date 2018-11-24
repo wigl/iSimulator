@@ -31,7 +31,7 @@ iSimulator is a GUI utility to control the Simulator, and manage the app install
 
 ## Usage
 
-Download [App](https://github.com/wigl/iSimulator/releases/download/2.0/iSimulator.app.zip) and run.
+Download [App](https://github.com/wigl/iSimulator/releases/download/3.0/iSimulator.zip) and run.
 
 ## Build from the code
 
