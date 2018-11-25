@@ -26,11 +26,12 @@ let defaultSubQueue = DispatchQueue(label: "defaultSubQueue")
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     
-    let barManager = BarManager.default
+    private var barManager: BarManager?
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         UserDefaults.standard.register(defaults: ["NSApplicationCrashOnExceptions": true])
         Crashlytics.start(withAPIKey: "c8a105a14acb1ea410f25dfec3f84a343fbd2f05")
+        self.barManager = BarManager.default
     }
 
 }

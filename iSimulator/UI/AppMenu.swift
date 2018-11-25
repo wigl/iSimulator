@@ -27,7 +27,6 @@ class AppMenu: NSMenu {
     private func addCustomItem() {
         let actionTypes: [AppActionable.Type] = [AppShowInFinderAction.self,
                                                  AppLaunchAction.self,
-                                                 AppRealmAction.self,
                                                  AppTerminateAction.self,
                                                  AppUninstallAction.self]
         actionTypes.forEach { (ActionType) in
@@ -42,6 +41,9 @@ class AppMenu: NSMenu {
             self.addItem(item)
         }
         self.insertItem(createOtherSimLunchAppItem(), at: 2)
+        if let item = createRealmAppItem() {
+            self.insertItem(item, at: 3)
+        }
 //        let item = NSMenuItem()
 //        item.view = AppInfoView(application: app)
 //        item.isEnabled = true
@@ -79,6 +81,40 @@ class AppMenu: NSMenu {
         }
         otherSimLunchAppItem.submenu = submenu
         return otherSimLunchAppItem
+    }
+    
+    func createRealmAppItem() -> NSMenuItem? {
+        let all = FileManager.default.enumerator(at: app.sandboxDirUrl, includingPropertiesForKeys: nil)
+        var realmFilePaths: [String] = []
+        while let fileUrl = all?.nextObject() as? URL {
+            if fileUrl.pathExtension.lowercased() == "realm" {
+                realmFilePaths.append(fileUrl.path)
+            }
+        }
+        guard !realmFilePaths.isEmpty else {
+            return nil
+        }
+        if realmFilePaths.count == 1 {
+            let action = AppRealmAction.init("Open Realm Database", path: realmFilePaths[0])
+            let item = NSMenuItem.init(title: action.title, action: #selector(action.perform), keyEquivalent: "")
+            item.target = action as AnyObject
+            item.image = action.icon
+            item.representedObject = action
+            return item
+        } else {
+            let item = NSMenuItem.init(title: "Open Realm Database", action: nil, keyEquivalent: "")
+            item.image = #imageLiteral(resourceName: "realmAppActionIcon")
+            let submenu = NSMenu()
+            realmFilePaths.forEach { (path) in
+                let action = AppRealmAction.init(URL.init(fileURLWithPath: path).lastPathComponent, path: path)
+                let item = NSMenuItem.init(title: action.title, action: #selector(action.perform), keyEquivalent: "")
+                item.target = action as AnyObject
+                item.representedObject = action
+                submenu.addItem(item)
+            }
+            item.submenu = submenu
+            return item
+        }
     }
 }
 
@@ -187,7 +223,7 @@ protocol AppActionableExt: AppActionable {
 extension AppActionableExt {
     
     var appPath: String? {
-        return NSWorkspace.shared.absolutePathForApplication(withBundleIdentifier: appBundleIdentifier)
+        return self.path(forBundleIdentifier: appBundleIdentifier)
     }
     
     var icon: NSImage? {
@@ -203,30 +239,27 @@ extension AppActionableExt {
         return appPath != nil
     }
     
+    func path(forBundleIdentifier bundleIdentifier: String) -> String? {
+        return NSWorkspace.shared.absolutePathForApplication(withBundleIdentifier: bundleIdentifier)
+    }
+    
 }
 
-class AppRealmAction: AppActionableExt {
-    var app: Application
-    required init(_ app: Application) {
-        self.app = app
-        let all = FileManager.default.enumerator(at: app.sandboxDirUrl, includingPropertiesForKeys: nil)
-        while let fileUrl = all?.nextObject() as? URL {
-            if fileUrl.pathExtension.lowercased() == "realm" {
-                realmPath = fileUrl.path
-                break
-            }
-        }
+class AppRealmAction {
+    
+    var icon: NSImage? {
+        return #imageLiteral(resourceName: "realmAppActionIcon")
     }
-    var title: String = "Open Realm Database"
-    var appBundleIdentifier: String = "io.realm.realmbrowser" //com.googlecode.iterm2
-    var realmPath: String?
+    let title: String
+    let realmPath: String
+    
+    init(_ title: String, path: String) {
+        self.title = title
+        self.realmPath = path
+    }
+    
     @objc func perform() {
-        if let path =  realmPath {
-            NSWorkspace.shared.openFile(path, withApplication: "Realm Browser")
-        }
-    }
-    var isAvailable: Bool {
-        return appPath != nil && realmPath != nil
+        NSWorkspace.shared.openFile(realmPath)
     }
 }
 

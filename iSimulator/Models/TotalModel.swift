@@ -58,7 +58,6 @@ class TotalModel: Mappable {
             NSWorkspace.shared.setIcon(#imageLiteral(resourceName: "linkDirectory"), forFile: Device.linkURL.path, options:[])
         }
         let jsonStr = shell("/usr/bin/xcrun", arguments: "simctl", "list", "-j").0
-        LogReport.default.currentSimctlListJsonStr = jsonStr
         _ = Mapper().map(JSONString: jsonStr, toObject: TotalModel.default)
     }
     
@@ -163,5 +162,21 @@ class TotalModel: Mappable {
         Device.bundleURLAppsCache.forEach{$0.value.removeLinkDir()}
         Device.bundleURLAppsCache = bundleURLAppsCacheTemp
         Device.sandboxURLs = sandboxURLsTemp
+        
+        LogReport.default.logSimctlList()
+    }
+    
+    var dataReportDic: [String: Any] {
+        let r = runtimes.map { $0.dataReportDic }
+        let dt = devicetypes.map { $0.dataReportDic }
+        let d = devices.mapValues {
+            $0.map({
+                $0.dataReportDic
+            })
+        }
+        let p = pairs.mapValues {
+            $0.dataReportDic
+        }
+        return ["r": r, "dt": dt, "d": d, "p": p]
     }
 }

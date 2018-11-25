@@ -15,22 +15,24 @@ class LogReport {
     
     static let `default` = LogReport()
     
-    var currentSimctlListJsonStr = "" {
-        didSet {
-            Crashlytics.sharedInstance().setObjectValue(currentSimctlListJsonStr, forKey: currentSimctlListJsonStrKey)
-        }
-    }
-    
     private init() {
         
     }
     
-    private func reportUserInfo() -> [String : Any] {
-        return [currentSimctlListJsonStrKey: currentSimctlListJsonStr]
+    func runtimeNilReport() {
+        Crashlytics.sharedInstance().recordError(ReportError.runtimeNil, withAdditionalUserInfo: nil)
     }
     
-    func runtimeNilReport() {
-        Crashlytics.sharedInstance().recordError(ReportError.runtimeNil, withAdditionalUserInfo: self.reportUserInfo())
+    func logSimctlList() {
+        let dic = TotalModel.default.dataReportDic
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dic, options: [])
+            if let str = String.init(data: data, encoding: .utf8) {
+                CLSLogv("%@", getVaList([str]))
+            }
+        } catch {
+
+        }
     }
     
 }
