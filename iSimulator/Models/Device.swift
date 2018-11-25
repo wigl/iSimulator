@@ -53,6 +53,10 @@ class Device: Mappable {
         name <- map["name"]
         udid <- map["udid"]
     }
+    
+    var dataReportDic: [String: String] {
+        return ["n": name, "id": udid]
+    }
 }
 
 // MARK: - device 操作

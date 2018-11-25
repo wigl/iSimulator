@@ -19,4 +19,8 @@ class DeviceType: Mappable {
         name <- map["name"]
         identifier <- map["identifier"]
     }
+    
+    var dataReportDic: [String: String] {
+        return ["n": name, "id": identifier]
+    }
 }

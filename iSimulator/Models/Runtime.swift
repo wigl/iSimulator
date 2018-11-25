@@ -46,4 +46,8 @@ class Runtime: Mappable {
         identifier <- map["identifier"]
         version <- map["version"]
     }
+    
+    var dataReportDic: [String: String] {
+        return ["n": name, "b": buildversion, "v": version, "id": identifier]
+    }
 }
