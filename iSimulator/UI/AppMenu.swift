@@ -155,7 +155,7 @@ class DeviceLaunchOtherAppAction: AppActionable {
         self.title = device.name
     }
     @objc func perform() {
-        device.installApp(app.appUrl.path)
+        device.installApp(app)
         device.launch(appBundleId: app.bundleID)
     }
     var isAvailable: Bool = true

@@ -95,11 +95,12 @@ extension Device {
         shell("/usr/bin/xcrun", arguments: "simctl", "delete", self.udid)
     }
     
-    func installApp(_ path: String) {
+    func installApp(_ app: Application) {
         if self.state == .shutdown {
             try? self.boot()
         }
-        shell("/usr/bin/xcrun", arguments: "simctl", "install", self.udid, path)
+        shell("/usr/bin/xcrun", arguments: "simctl", "terminate", self.udid, app.bundleID)
+        shell("/usr/bin/xcrun", arguments: "simctl", "install", self.udid, app.appUrl.path)
     }
     
     func launch(appBundleId: String) {
