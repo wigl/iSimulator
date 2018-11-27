@@ -100,6 +100,13 @@ extension Application {
         shell("/usr/bin/xcrun", arguments: "simctl", "uninstall", device.udid, bundleID)
     }
     
+    func resetContent() throws {
+        let contents = try? FileManager.default.contentsOfDirectory(at: sandboxDirUrl, includingPropertiesForKeys: [], options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants])
+        contents?.forEach({ (url) in
+            try? FileManager.default.removeItem(at: url)
+        })
+    }
+    
     func size(_ closure: @escaping (_ sandboxSize: UInt64, _ bundleSize: UInt64)-> Void) {
         DispatchQueue.global().async {
             //            closure(self.sizeOfDirectory(self.sandboxDirUrl), self.sizeOfDirectory(self.bundleDirUrl))
