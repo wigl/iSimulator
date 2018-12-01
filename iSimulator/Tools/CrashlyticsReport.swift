@@ -25,15 +25,19 @@ class LogReport {
     }
     
     func logSimctlList() {
-        let dic = TotalModel.default.dataReportDic
-        do {
-            let data = try JSONSerialization.data(withJSONObject: dic, options: [])
-            if let str = String.init(data: data, encoding: .utf8) {
-                CLSLogv("%@", getVaList([str]))
-            }
-        } catch {
+        #if DEBUG
+        
+        #else
+            let dic = TotalModel.default.dataReportDic
+            do {
+                let data = try JSONSerialization.data(withJSONObject: dic, options: [])
+                if let str = String.init(data: data, encoding: .utf8) {
+                    CLSLogv("%@", getVaList([str]))
+                }
+            } catch {
 
-        }
+            }
+        #endif
     }
     
 }

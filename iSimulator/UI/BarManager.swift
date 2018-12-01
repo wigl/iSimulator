@@ -15,11 +15,6 @@ class BarManager {
     private let menu = NSMenu()
     private var watch: SKQueue?
     private var deviceInfoWatch: FileWatch?
-    /*
-     监控设备、模拟器数量、App数量，可能watch和deviceInfoWatch短时间内给出多个回调
-     增加该变量，控制刷新频率
-     */
-    private var waitRefreshNum = 0
     private var refreshTask: DispatchWorkItem?
     
     private init() {
@@ -180,6 +175,7 @@ class BarManager {
     @objc private func preference(_ sender: NSMenuItem) {
         if let controller = preferenceWindowController {
             controller.close()
+            preferenceWindowController = nil
         }
         let title = sender.title
         if title == "Xcode Select..." {
