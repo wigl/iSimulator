@@ -157,8 +157,9 @@ class TotalModel: Mappable {
         }
         // 删除不存在的app虚拟文件夹
         // 不在app deinit 方法里面 removeLinkDir， 因为deinit方法调用有延迟
+        let invalidApp = self.appCache.urlAndAppDic
         DispatchQueue.main.async {
-            self.appCache.urlAndAppDic.forEach { $0.value.removeLinkDir() }
+            invalidApp.forEach { $0.value.removeLinkDir() }
         }
         
         self.appCache.urlAndAppDic = urlAndAppDicCache
