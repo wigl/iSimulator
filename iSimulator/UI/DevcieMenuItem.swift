@@ -138,7 +138,9 @@ class DevicePairAction: DeviceActionable {
 
     @objc func perform() {
         watchDevice.pair(to: device)
-        BarManager.default.refresh()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            BarManager.default.refresh()
+        }
     }
 }
 
@@ -157,7 +159,9 @@ class DeviceUnpairAction: DeviceActionable {
     
     @objc func perform() {
         device.unpair()
-        BarManager.default.refresh()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            BarManager.default.refresh()
+        }
     }
     
 }
