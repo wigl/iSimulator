@@ -6,14 +6,26 @@
 //  Copyright © 2018 niels.jin. All rights reserved.
 //
 
-import Foundation
+import Cocoa
 
 private let kUserDefaultDocumentKey = "kUserDefaultDocumentKey"
 private let kDocumentName = "iSimulator"
 
 class RootLink {
     
-    static let queue = DispatchQueue(label: "iSimulator.update.queue")
+    static func createDir() {
+        let contents = try? FileManager.default.contentsOfDirectory(at: self.url, includingPropertiesForKeys: [.isHiddenKey], options: [.skipsPackageDescendants, .skipsSubdirectoryDescendants])
+        if let contents = contents{
+            for url in contents {
+                if let last = url.pathComponents.last,
+                    last == "Icon\r"{
+                    try? FileManager.default.removeItem(at: self.url)
+                }
+            }
+        }
+        try? FileManager.default.createDirectory(at: self.url, withIntermediateDirectories: true)
+        NSWorkspace.shared.setIcon(#imageLiteral(resourceName: "linkDirectory"), forFile: self.url.path, options:[])
+    }
     
     static func update(with path: String, finish:@escaping (_ error: String?)->Void) {
         guard FileManager.default.fileExists(atPath: path) else {
@@ -21,16 +33,14 @@ class RootLink {
             return
         }
         let linkURL = URL(fileURLWithPath: path).appendingPathComponent(kDocumentName)
-        self.queue.async {
-            do {
-                try FileManager.default.moveItem(at: self.url, to: linkURL)
-                self.url = linkURL
-                UserDefaults.standard.set(path, forKey: kUserDefaultDocumentKey)
-                UserDefaults.standard.synchronize()
-                finish(nil)
-            } catch {
-                finish(error.localizedDescription)
-            }
+        do {
+            try FileManager.default.moveItem(at: self.url, to: linkURL)
+            self.url = linkURL
+            UserDefaults.standard.set(path, forKey: kUserDefaultDocumentKey)
+            UserDefaults.standard.synchronize()
+            finish(nil)
+        } catch {
+            finish(error.localizedDescription)
         }
     }
     

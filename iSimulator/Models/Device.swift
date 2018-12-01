@@ -172,10 +172,8 @@ extension Device {
         })
         // ⚠️⚠️所有app赋值成功后，再创建linkDir，否则无法判断app.bundleDisplayName是否重复⚠️⚠️
         self.applications = apps
-        self.applications.forEach{ app in
-            RootLink.queue.async {
-                app.createLinkDir()
-            }
+        DispatchQueue.main.async {
+          self.applications.forEach{ $0.createLinkDir() }
         }
     }
     

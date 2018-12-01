@@ -46,18 +46,9 @@ class TotalModel: Mappable {
         if isForceUpdate {
             isForceUpdate = false
             appCache = ApplicationCache()
-            let contents = try? FileManager.default.contentsOfDirectory(at: RootLink.url, includingPropertiesForKeys: [.isHiddenKey], options: [.skipsPackageDescendants, .skipsSubdirectoryDescendants])
-            if let contents = contents{
-                for url in contents {
-                    if let last = url.pathComponents.last,
-                        last == "Icon\r"{
-                        try? FileManager.default.removeItem(at: RootLink.url)
-                    }
-                }
+            DispatchQueue.main.async {
+                RootLink.createDir()
             }
-            
-            try? FileManager.default.createDirectory(at: RootLink.url, withIntermediateDirectories: true)
-            NSWorkspace.shared.setIcon(#imageLiteral(resourceName: "linkDirectory"), forFile: RootLink.url.path, options:[])
         }
         let jsonStr = shell("/usr/bin/xcrun", arguments: "simctl", "list", "-j").outStr
         _ = Mapper().map(JSONString: jsonStr, toObject: TotalModel.default)
@@ -165,10 +156,8 @@ class TotalModel: Mappable {
         }
         // 删除不存在的app虚拟文件夹
         // 不在app deinit 方法里面 removeLinkDir， 因为deinit方法调用有延迟
-        self.appCache.urlAndAppDic.forEach { app in
-            RootLink.queue.async {
-                app.value.removeLinkDir()
-            }
+        DispatchQueue.main.async {
+            self.appCache.urlAndAppDic.forEach { $0.value.removeLinkDir() }
         }
         
         self.appCache.urlAndAppDic = urlAndAppDicCache
