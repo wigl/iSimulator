@@ -160,6 +160,7 @@ class DeviceUnpairAction: DeviceActionable {
     
     @objc func perform() {
         device.unpair()
+        BarManager.default.refresh()
     }
     
 }

@@ -9,7 +9,7 @@
 import Foundation
 
 @discardableResult
-func shell(_ launchPath: String, arguments: String...) -> (String, String) {
+func shell(_ launchPath: String, arguments: String...) -> (outStr: String, err: String) {
     let process = Process()
     process.launchPath = launchPath
     process.arguments = arguments

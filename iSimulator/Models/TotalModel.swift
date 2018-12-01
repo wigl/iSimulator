@@ -15,6 +15,7 @@ class TotalModel: Mappable {
     var isForceUpdate = true
     var lastXcodePath = ""
     var isXcode9OrGreater = false
+    var appCache = ApplicationCache()
     
     func updateXcodeVersion() {
         var url = URL.init(fileURLWithPath: lastXcodePath)
@@ -33,7 +34,7 @@ class TotalModel: Mappable {
     
     ///该方法： 耗时 && 阻塞
     func update() {
-        let xcodePath = shell("/usr/bin/xcrun", arguments: "xcode-select", "-p").0
+        let xcodePath = shell("/usr/bin/xcrun", arguments: "xcode-select", "-p").outStr
         if lastXcodePath != xcodePath{
             isForceUpdate = true
             lastXcodePath = xcodePath
@@ -41,8 +42,7 @@ class TotalModel: Mappable {
         }
         if isForceUpdate {
             isForceUpdate = false
-            Device.bundleURLAppsCache = [:]
-            Device.sandboxURLs = []
+            appCache = ApplicationCache()
             let contents = try? FileManager.default.contentsOfDirectory(at: RootLink.url, includingPropertiesForKeys: [.isHiddenKey], options: [.skipsPackageDescendants, .skipsSubdirectoryDescendants])
             if let contents = contents{
                 for url in contents {
@@ -56,7 +56,7 @@ class TotalModel: Mappable {
             try? FileManager.default.createDirectory(at: RootLink.url, withIntermediateDirectories: true)
             NSWorkspace.shared.setIcon(#imageLiteral(resourceName: "linkDirectory"), forFile: RootLink.url.path, options:[])
         }
-        let jsonStr = shell("/usr/bin/xcrun", arguments: "simctl", "list", "-j").0
+        let jsonStr = shell("/usr/bin/xcrun", arguments: "simctl", "list", "-j").outStr
         _ = Mapper().map(JSONString: jsonStr, toObject: TotalModel.default)
     }
     
@@ -109,7 +109,7 @@ class TotalModel: Mappable {
             r.devices.forEach{
                 $0.runtime = r
                 //⚠️⚠️关联之后，再更新device的APP，否则取不到device的runtime⚠️⚠️
-                $0.updateApps()
+                $0.updateApps(with: appCache)
             }
         }
         // 关联pair
@@ -141,28 +141,31 @@ class TotalModel: Mappable {
             }
         }
         // 更新缓存
-        Device.sandboxURLs = []
-        var bundleURLAppsCacheTemp: [URL: Application] = [:]
-        var sandboxURLsTemp: Set<URL> = []
-        devices.forEach { (_, arr) in
-            arr.forEach({ (d) in
-                d.applications.forEach({ (app) in
-                    //添加至临时缓存
-                    bundleURLAppsCacheTemp[app.bundleDirUrl] = app
-                    sandboxURLsTemp.insert(app.sandboxDirUrl)
-                    //从旧的缓存中移除
-                    Device.bundleURLAppsCache.removeValue(forKey: app.bundleDirUrl)
-                    Device.sandboxURLs.remove(app.sandboxDirUrl)
-                })
-            })
-        }
-        // 缓存中剩余的App删除linkDir
-        // 不在app deinit 方法里面 removeLinkDir， 因为deinit方法调用有延迟
-        Device.bundleURLAppsCache.forEach{$0.value.removeLinkDir()}
-        Device.bundleURLAppsCache = bundleURLAppsCacheTemp
-        Device.sandboxURLs = sandboxURLsTemp
-        
+        self.updateCache()
+        // 更新log状态
         LogReport.default.logSimctlList()
+    }
+    
+    func updateCache() {
+        let applications = runtimes.flatMap { $0.devices }.flatMap { $0.applications }
+        
+        var urlAndAppDicCache: [URL: Application] = [:]
+        var sandboxURLsCache: Set<URL> = []
+        
+        applications.forEach { (app) in
+            //添加至临时缓存
+            urlAndAppDicCache[app.bundleDirUrl] = app
+            sandboxURLsCache.insert(app.sandboxDirUrl)
+            //从旧的缓存中移除
+            self.appCache.urlAndAppDic.removeValue(forKey: app.bundleDirUrl)
+            self.appCache.sandboxURLs.remove(app.sandboxDirUrl)
+        }
+        // 删除不存在的app虚拟文件夹
+        // 不在app deinit 方法里面 removeLinkDir， 因为deinit方法调用有延迟
+        self.appCache.urlAndAppDic.forEach { $0.value.removeLinkDir() }
+        
+        self.appCache.urlAndAppDic = urlAndAppDicCache
+        self.appCache.sandboxURLs = sandboxURLsCache
     }
     
     var dataReportDic: [String: Any] {

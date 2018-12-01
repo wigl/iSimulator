@@ -10,6 +10,16 @@ import Foundation
 import ObjectMapper
 
 class Device: Mappable {
+    
+    static let url: URL = {
+        let userLibraryURL = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
+        return userLibraryURL.appendingPathComponent("Developer/CoreSimulator/Devices")
+    }()
+    
+    static let setURL: URL = {
+        return url.appendingPathComponent("device_set.plist")
+    }()
+    
     enum State: String {
         case booted = "Booted"
         case shutdown = "Shutdown"
@@ -38,14 +48,14 @@ class Device: Mappable {
     var infoURL: URL {
         return Device.url.appendingPathComponent("\(self.udid)/device.plist")
     }
-    /// 暂未使用
-    fileprivate var iconStateURL: URL {
-        return Device.url.appendingPathComponent("\(self.udid)/data/Library/SpringBoard/IconState.plist")
+    
+    init() {
+        
     }
     
-    init() { }
-    
-    required init?(map: Map) { }
+    required init?(map: Map) {
+        
+    }
     
     func mapping(map: Map) {
         state <- (map["state"], EnumTransform())
@@ -59,22 +69,16 @@ class Device: Mappable {
     }
 }
 
-// MARK: - device 操作
+// MARK: - device Action
 extension Device {
     func boot() throws {
-//        shell("/usr/bin/xcrun", arguments: "simctl", "boot", self.udid)
-//        var xcode = TotalModel.default.lastXcodePath
-//        if xcode.hasSuffix("\n"){
-//            xcode = String(xcode.dropLast())
-//        }
-//        let simPath = xcode.appending("/Applications/Simulator.app")
-//        shell("/usr/bin/xcrun", arguments: "open", simPath)
+        //        shell("/usr/bin/xcrun", arguments: "simctl", "boot", self.udid)
         try? FBSimTool.default.boot(self.udid)
     }
     
     func shutdown() throws {
+        //        shell("/usr/bin/xcrun", arguments: "simctl", "shutdown", self.udid)
         try? FBSimTool.default.shutdown(self.udid)
-//        shell("/usr/bin/xcrun", arguments: "simctl", "shutdown", self.udid)
     }
     
     func erase() throws {
@@ -88,7 +92,6 @@ extension Device {
         DispatchQueue.main.asyncAfter(deadline: .now() + afterTime) {
             shell("/usr/bin/xcrun", arguments: "simctl", "erase", self.udid)
         }
-        
     }
     
     func delete() throws {
@@ -113,7 +116,6 @@ extension Device {
     func unpair() {
         if let udid = self.pairUDID{
             shell("/usr/bin/xcrun", arguments: "simctl", "unpair", udid)
-            BarManager.default.refresh()
         }
     }
 }
@@ -121,81 +123,77 @@ extension Device {
 
 // MARK: - 获取APP：方式1
 extension Device {
-    /// 以app的boundleURL为key，缓存
-    static var bundleURLAppsCache: [URL: Application] = [:]
-    /// 缓存的sandboxURL
-    static var sandboxURLs: Set<URL> = []
-    /// 需要忽略的 boundleURL/sandboxURL：如无效的文件夹
-    private static var ignorePaths: Set<URL> = []
     
-    func updateApps() {
-        self.applications = []
-        let idAndBundleUrlDic = identifierAndUrl(with: bundleURL)
-        var idAndSandboxUrlDic = identifierAndUrl(with: sandboxURL)
+    func updateApps(with cache: ApplicationCache) {
+        let bundleContents = (try? FileManager.default.contentsOfDirectory(at: bundleURL, includingPropertiesForKeys: [.isDirectoryKey], options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants])) ?? []
+        
+        let sandboxContents = (try? FileManager.default.contentsOfDirectory(at: sandboxURL, includingPropertiesForKeys: [.isDirectoryKey], options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants])) ?? []
+        
+        var apps: [Application] = []
+        
+        // 优先从缓存中取
+        var newBundles = [URL]()
+        bundleContents.enumerated().forEach { (offset, url) in
+            if let app = cache.urlAndAppDic[url] {
+                app.device = self
+                apps.append(app)
+            } else if cache.ignoreURLs.contains(url) {
+                //
+            } else {
+                newBundles.append(url)
+            }
+        }
+        
+        var newSandboxs = [URL]()
+        sandboxContents.enumerated().forEach { (offset, url) in
+            if cache.sandboxURLs.contains(url) || cache.ignoreURLs.contains(url) {
+                //
+            } else {
+                newSandboxs.append(url)
+            }
+        }
+        
+        let idAndBundleUrlDic = identifierAndUrl(with: newBundles)
+        var idAndSandboxUrlDic = identifierAndUrl(with: newSandboxs)
+        
         idAndBundleUrlDic.forEach { (bundleID, bundleDirUrl) in
-            guard let sandboxDirUrl = idAndSandboxUrlDic[bundleID] else {
+            guard let sandboxDirUrl = idAndSandboxUrlDic.removeValue(forKey: bundleID) else {
                 return
             }
             if let app = Application(bundleID: bundleID, bundleDirUrl: bundleDirUrl, sandboxDirUrl: sandboxDirUrl){
                 app.device = self
-                self.applications.append(app)
-                idAndSandboxUrlDic.removeValue(forKey: bundleID)
-            }else{
-                Device.ignorePaths.insert(bundleDirUrl)
+                apps.append(app)
+            } else {
+                cache.ignoreURLs.insert(bundleDirUrl)
             }
         }
         idAndSandboxUrlDic.forEach({ (_, url) in
-            Device.ignorePaths.insert(url)
+            cache.ignoreURLs.insert(url)
         })
         // ⚠️⚠️所有app赋值成功后，再创建linkDir，否则无法判断app.bundleDisplayName是否重复⚠️⚠️
-        self.applications.forEach{$0.createLinkDir()}
+        self.applications = apps
+        self.applications.forEach{ $0.createLinkDir() }
     }
     
-    private func identifierAndUrl(with url: URL) -> [String: URL] {
-        let contents = try? FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: [.isDirectoryKey], options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants])
-        guard let contentArr = contents, !contentArr.isEmpty else {
-            return [:]
-        }
+    private func identifierAndUrl(with urls: [URL]) -> [String: URL] {
         var dic: [String: URL] = [:]
-        contentArr.forEach { (url) in
-            if  Device.ignorePaths.contains(url) {
-                return
-            }
-            if let app = Device.bundleURLAppsCache[url] {
-                app.device = self
-                self.applications.append(app)
-                return
-            }
-            if Device.sandboxURLs.contains(url) {
-                return
-            }
+        urls.forEach { (url) in
             if let contents = NSDictionary(contentsOf: url.appendingPathComponent(".com.apple.mobile_container_manager.metadata.plist")),
                 let identifier = contents["MCMMetadataIdentifier"] as? String {
                 dic[identifier] = url
-            }else{
-                Device.ignorePaths.insert(url)
             }
         }
         return dic
     }
 }
 
-// MARK: - Device目录
-extension Device {
-    static let url: URL = {
-        let userLibraryURL = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
-        return userLibraryURL.appendingPathComponent("Developer/CoreSimulator/Devices")
-    }()
-    /// 暂未使用
-    private static let setURL: URL = {
-        return url.appendingPathComponent("device_set.plist")
-    }()
-    
-}
-
 // MARK: - 获取安装的APP：方式2，暂未使用
 extension Device {
-    //⚠️⚠️还有问题没解决：simctl appinfo返回的数据格式不是jison⚠️⚠️
+    
+    private var iconStateURL: URL {
+        return Device.url.appendingPathComponent("\(self.udid)/data/Library/SpringBoard/IconState.plist")
+    }
+    
     private func allApps2() -> [Application] {
         var apps: [Application] = []
         guard let dic = NSDictionary(contentsOf: iconStateURL) as? [String: Any] else {
@@ -217,8 +215,9 @@ extension Device {
         return apps
     }
     
+    //⚠️⚠️simctl appinfo返回的数据格式不是json, 且device必须是booted的，否则获取不到信息⚠️⚠️
     private func fetchAppInfo(deviceId: String, appBunldId: String) -> [String: Any] {
-        let jsonStr = shell("/usr/bin/xcrun", arguments: "simctl", "appinfo", deviceId, appBunldId).0
+        let jsonStr = shell("/usr/bin/xcrun", arguments: "simctl", "appinfo", deviceId, appBunldId).outStr
         let data = jsonStr.data(using: .utf8, allowLossyConversion: true)
         if let data = data {
             let parsedJSON = try? JSONSerialization.jsonObject(with: data, options: .allowFragments)
