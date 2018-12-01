@@ -43,6 +43,7 @@
 		3198339621A7F5FF004ADEE3 /* Crashlytics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3198338921A7F5FE004ADEE3 /* Crashlytics.framework */; };
 		3198339721A7F5FF004ADEE3 /* Crashlytics.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3198338921A7F5FE004ADEE3 /* Crashlytics.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		319833E021A94EDF004ADEE3 /* CrashlyticsReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319833DF21A94EDF004ADEE3 /* CrashlyticsReport.swift */; };
+		31CD6D0221B2817900E49DC0 /* RootLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CD6D0121B2817900E49DC0 /* RootLink.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -97,6 +98,7 @@
 		3198338821A7F5FE004ADEE3 /* ObjectMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ObjectMapper.framework; path = Carthage/Build/Mac/ObjectMapper.framework; sourceTree = "<group>"; };
 		3198338921A7F5FE004ADEE3 /* Crashlytics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Crashlytics.framework; path = Carthage/Build/Mac/Crashlytics.framework; sourceTree = "<group>"; };
 		319833DF21A94EDF004ADEE3 /* CrashlyticsReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrashlyticsReport.swift; sourceTree = "<group>"; };
+		31CD6D0121B2817900E49DC0 /* RootLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootLink.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +148,7 @@
 				29157C5D1F4D66220069BDB6 /* Device.swift */,
 				29157C611F4D7EB90069BDB6 /* Application.swift */,
 				29AFDFAF1FBBDA6E00544CE5 /* Pair.swift */,
+				31CD6D0121B2817900E49DC0 /* RootLink.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				29157C621F4D7EB90069BDB6 /* Application.swift in Sources */,
+				31CD6D0221B2817900E49DC0 /* RootLink.swift in Sources */,
 				29AFDFB01FBBDA6E00544CE5 /* Pair.swift in Sources */,
 				29157C601F4D6BFE0069BDB6 /* TotalModel.swift in Sources */,
 				293B2D401F4E9FF00009DA18 /* NSImage+Extension.swift in Sources */,

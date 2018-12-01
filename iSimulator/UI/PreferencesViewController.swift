@@ -20,7 +20,7 @@ class PreferencesViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.pathTextField.stringValue = Device.linkURL.path
+        self.pathTextField.stringValue = RootLink.url.path
         let infoDic = Bundle.main.infoDictionary!
         aboutName.stringValue = infoDic["CFBundleDisplayName"] as! String
         let shortVersion = infoDic["CFBundleShortVersionString"] as! String
@@ -49,7 +49,7 @@ extension PreferencesViewController {
     }
     
     @IBAction func openPath(_ sender: Any) {
-        NSWorkspace.shared.open(Device.linkURL)
+        NSWorkspace.shared.open(RootLink.url)
     }
     
     func changePathAlert(path: String) {
@@ -62,12 +62,12 @@ extension PreferencesViewController {
         NSApp.activate(ignoringOtherApps: true)
         alert.beginSheetModal(for: self.view.window!) { (response) in
             if response == NSApplication.ModalResponse.alertFirstButtonReturn {
-                Device.updateDocumentURL(path: path, finish: { (errorStr) in
+                RootLink.update(with: path, finish: { (errorStr) in
                     if let error = errorStr {
                         self.changePathErrorAlert(error: error)
                         return
                     }
-                    self.pathTextField.stringValue = Device.linkURL.path
+                    self.pathTextField.stringValue = RootLink.url.path
                 })
             }
         }

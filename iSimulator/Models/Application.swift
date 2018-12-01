@@ -22,8 +22,9 @@ class Application {
     let image: NSImage
     let originImage: NSImage
     weak var device: Device!
-    var linkURL:URL?
-    lazy var attributeStr: NSMutableAttributedString = {
+    private(set) var linkURL:URL?
+    
+    lazy private(set) var attributeStr: NSMutableAttributedString = {
         let name = "\(self.bundleDisplayName) - \(self.bundleShortVersion)(\(self.bundleVersion))"
         let other = "\n\(self.bundleID)"
         let att = NSMutableAttributedString(string: name + other)
@@ -40,6 +41,7 @@ class Application {
             else {
                 return nil
         }
+        
         var appURLTemp: URL?
         for url in contents{
             if url.pathExtension == "app" {
@@ -48,22 +50,22 @@ class Application {
             }
         }
         guard let appURL = appURLTemp else { return nil }
+        self.appUrl = appURL
         
         let appInfoURL = appURL.appendingPathComponent("Info.plist")
         guard let appInfoDict = NSDictionary(contentsOf: appInfoURL),
             let aBundleID = appInfoDict["CFBundleIdentifier"] as? String,
-            let aBundleDisplayName = (appInfoDict["CFBundleDisplayName"] as? String) ?? (appInfoDict["CFBundleName"] as? String) else {
+            let aBundleDisplayName = (appInfoDict["CFBundleDisplayName"] as? String) ?? (appInfoDict["CFBundleName"] as? String),
+            aBundleID == bundleID else {
                 return nil
         }
-        if aBundleID != bundleID {
-            return nil
-        }
+        bundleDisplayName = aBundleDisplayName
+        
         let aBundleShortVersion = appInfoDict["CFBundleShortVersionString"] as? String ?? "NULL"
         let aBundleVersion = appInfoDict["CFBundleVersion"] as? String ?? "NULL"
-        self.appUrl = appURL
-        bundleDisplayName = aBundleDisplayName
         bundleShortVersion = aBundleShortVersion
         bundleVersion = aBundleVersion
+        
         var iconFiles = ((appInfoDict["CFBundleIcons"] as? NSDictionary)?["CFBundlePrimaryIcon"] as? NSDictionary)?["CFBundleIconFiles"] as? [String]
         if iconFiles == nil {
             iconFiles = ["Icon.png"]
@@ -81,7 +83,7 @@ class Application {
 }
 
 
-// MARK: - Application 操作
+// MARK: - Application Action
 extension Application {
     
     func launch() {
@@ -95,12 +97,12 @@ extension Application {
         shell("/usr/bin/xcrun", arguments: "simctl", "terminate", device.udid, bundleID)
     }
     
-    func uninstall() throws {
+    func uninstall() {
         self.terminate()
         shell("/usr/bin/xcrun", arguments: "simctl", "uninstall", device.udid, bundleID)
     }
     
-    func resetContent() throws {
+    func resetContent() {
         let contents = try? FileManager.default.contentsOfDirectory(at: sandboxDirUrl, includingPropertiesForKeys: [], options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants])
         contents?.forEach({ (url) in
             try? FileManager.default.removeItem(at: url)
@@ -128,19 +130,20 @@ extension Application {
 
 // MARK: - 虚拟文件夹创建/删除
 extension Application {
+    
     func createLinkDir() {
-        if self.linkURL != nil{
+        guard self.linkURL == nil else {
             return
         }
-        var url = Device.linkURL
+        var url = RootLink.url
         url.appendPathComponent(self.device.runtime.name)
-        let duplicateDeviceNames = self.device.runtime.devices.map{$0.name}.removeDuplicates().1
+        let duplicateDeviceNames = self.device.runtime.devices.map{$0.name}.divideDuplicates().duplicates
         if duplicateDeviceNames.contains(self.device.name) {
             url.appendPathComponent("\(self.device.name)_\(self.device.udid)")
         }else{
             url.appendPathComponent(device.name)
         }
-        let duplicateAppNames = device.applications.map{$0.bundleDisplayName}.removeDuplicates().1
+        let duplicateAppNames = device.applications.map{$0.bundleDisplayName}.divideDuplicates().duplicates
         if duplicateAppNames.contains(self.bundleDisplayName) {
             url.appendPathComponent("\(self.bundleDisplayName)_\(self.bundleID)")
         }else{
@@ -155,7 +158,7 @@ extension Application {
         let bundleURL = url.appendingPathComponent("Bundle")
         let sandboxURL = url.appendingPathComponent("Sandbox")
         createSymbolicLink(at: bundleURL, withDestinationURL: self.bundleDirUrl)
-        createSymbolicLink(at: sandboxURL, withDestinationURL: self.self.sandboxDirUrl)
+        createSymbolicLink(at: sandboxURL, withDestinationURL: self.sandboxDirUrl)
         /*
          ❌❌
          options:0 or excludeQuickDrawElementsIconCreationOption会造成内存飙升，内存泄漏
@@ -167,11 +170,11 @@ extension Application {
     }
     
     /*
-     对于Apple Watch模拟器，当调试/安装App的时候，新的APP（可能）安装的时候，会形成一个新的App，App的UDID不同。
+     1. createSymbolicLink的时候，要先做判断，已经存在则不处理。
+     2. 对于Apple Watch模拟器，当调试/安装App的时候，（可能）会形成一个新的App，App的UDID不同。
      所以新的App和之前App的bundleDirUrl、sandboxDirUrl均不同，但却是同一个App，也就是我们要创建的虚拟文件
      bundleURL、sandboxURL却相同，这时候createSymbolicLink方法会报错（文件已经存在，无法创建），也就是无法更
-     新到新的连接。
-     so，createSymbolicLink的时候，要做如下判断，并调用FileManager的removeItem方法，先移除，再重新创建link
+     新到新的连接，重新创建link的时候，先remove
      */
     private func createSymbolicLink(at url: URL, withDestinationURL destURL: URL) {
         if let destinationUrlPath = try? FileManager.default.destinationOfSymbolicLink(atPath: url.path),
@@ -183,10 +186,9 @@ extension Application {
     }
     
     /*
-     如上原因：Apple Watch模拟器调试安装App的时候，新的APP和以前的APP UDID不同，对于代码而言，已经是新的APP，但是虚拟文件
-     还是旧的文件。
-     因为是新的APP，所以旧的APP会被移除，同时会调用removeLinkDir方法
-     所以，调用该方法的时候，做进一步的判断
+     如上原因：Apple Watch模拟器调试安装App的时候，新的APP和以前的APP UDID不同，但是虚拟文件却一样。
+     因为新的APP安装的时候，会更新虚拟文件
+     所以，remove的时候，做进一步的判断，防止remove掉新的APP虚拟文件。
      */
     func removeLinkDir() {
         guard let url = self.linkURL else {

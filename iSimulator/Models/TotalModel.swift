@@ -43,19 +43,18 @@ class TotalModel: Mappable {
             isForceUpdate = false
             Device.bundleURLAppsCache = [:]
             Device.sandboxURLs = []
-            let contents = try? FileManager.default.contentsOfDirectory(at: Device.linkURL, includingPropertiesForKeys: [.isHiddenKey], options: [.skipsPackageDescendants, .skipsSubdirectoryDescendants])
+            let contents = try? FileManager.default.contentsOfDirectory(at: RootLink.url, includingPropertiesForKeys: [.isHiddenKey], options: [.skipsPackageDescendants, .skipsSubdirectoryDescendants])
             if let contents = contents{
                 for url in contents {
                     if let last = url.pathComponents.last,
                         last == "Icon\r"{
-                        try? FileManager.default.removeItem(at: Device.linkURL)
+                        try? FileManager.default.removeItem(at: RootLink.url)
                     }
                 }
             }
             
-            try? FileManager.default.removeItem(at: Device.linkURL)
-            try? FileManager.default.createDirectory(at: Device.linkURL, withIntermediateDirectories: true)
-            NSWorkspace.shared.setIcon(#imageLiteral(resourceName: "linkDirectory"), forFile: Device.linkURL.path, options:[])
+            try? FileManager.default.createDirectory(at: RootLink.url, withIntermediateDirectories: true)
+            NSWorkspace.shared.setIcon(#imageLiteral(resourceName: "linkDirectory"), forFile: RootLink.url.path, options:[])
         }
         let jsonStr = shell("/usr/bin/xcrun", arguments: "simctl", "list", "-j").0
         _ = Mapper().map(JSONString: jsonStr, toObject: TotalModel.default)

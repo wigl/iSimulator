@@ -207,7 +207,7 @@ class AppResetAction: AppActionable {
         NSApp.activate(ignoringOtherApps: true)
         let response = alert.runModal()
         if response == NSApplication.ModalResponse.alertFirstButtonReturn {
-            try? app.resetContent()
+            app.resetContent()
         }
         
     }
@@ -233,7 +233,7 @@ class AppUninstallAction: AppActionable {
         NSApp.activate(ignoringOtherApps: true)
         let response = alert.runModal()
         if response == NSApplication.ModalResponse.alertFirstButtonReturn {
-            try? app.uninstall()
+            app.uninstall()
         }
         
     }
