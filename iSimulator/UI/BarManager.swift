@@ -136,17 +136,6 @@ class BarManager {
         return items
     }
     
-    @objc private func deviceOnOrOff(_ sender: NSMenuItem) {
-        if let device = sender.representedObject as? Device {
-            switch device.state {
-            case .booted:
-                try? device.shutdown()
-            case .shutdown:
-                try? device.boot()
-            }
-        }
-    }
-    
     //MARK: - Common Items and Actions
     private lazy var commonItems: [NSMenuItem] = {
         var items: [NSMenuItem] = []
