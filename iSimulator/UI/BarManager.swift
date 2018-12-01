@@ -20,6 +20,8 @@ class BarManager {
      增加该变量，控制刷新频率
      */
     private var waitRefreshNum = 0
+    private var refreshTask: DispatchWorkItem?
+    
     private init() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         statusItem.image = #imageLiteral(resourceName: "statusItem_icon")
@@ -35,18 +37,15 @@ class BarManager {
     private func addWatch() {
         watch = SKQueue({ [weak self] (noti, _) in
             if noti.contains(.Write) && noti.contains(.SizeIncrease) {
-                self?.refresh(wait: 1)
+                self?.refresh()
             }
         })
     }
     
-    func refresh(wait deadline: Double = 0) {
-        waitRefreshNum = waitRefreshNum + 1
-        self.queue.asyncAfter(deadline: .now() + deadline) {
-            self.waitRefreshNum = self.waitRefreshNum - 1
-            if self.waitRefreshNum != 0{
-                return
-            }
+    func refresh() {
+        refreshTask?.cancel()
+        let task = DispatchWorkItem { [weak self] in
+            guard let `self` = self else { return }
             let deviceItems = self.deviceItems()
             DispatchQueue.main.async {
                 self.menu.removeAllItems()
@@ -64,6 +63,8 @@ class BarManager {
                 })
             }
         }
+        self.refreshTask = task
+        self.queue.asyncAfter(deadline: .now() + 0.75, execute: task)
     }
     
     private func deviceItems() -> [NSMenuItem] {
@@ -109,7 +110,7 @@ class BarManager {
         DispatchQueue.main.async {
             self.deviceInfoWatch = try? FileWatch(paths: deviceInfoURLPath, createFlag: [.UseCFTypes, .FileEvents], runLoop: .current, latency: 1, eventHandler: { [weak self] (event) in
                 if event.flag.contains(.ItemIsFile) && event.flag.contains(.ItemRenamed) {
-                    self?.refresh(wait: 0.5)
+                    self?.refresh()
                 }
             })
         }
