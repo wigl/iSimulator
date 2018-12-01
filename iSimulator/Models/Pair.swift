@@ -10,10 +10,14 @@ import Foundation
 import ObjectMapper
 
 class Pair: Mappable {
+    
     var watch: Device?
     var phone: Device?
     var state = ""
-    required init?(map: Map) { }
+    
+    required init?(map: Map) {
+        
+    }
     
     func mapping(map: Map) {
         watch <- map["watch"]
@@ -27,6 +31,6 @@ class Pair: Mappable {
         } else {
             return ["w": watch?.udid ?? "", "p": phone?.udid ?? ""]
         }
-        
     }
+    
 }
