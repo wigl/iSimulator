@@ -137,7 +137,7 @@ class DevicePairAction: DeviceActionable {
     }
 
     @objc func perform() {
-        shell("/usr/bin/xcrun", arguments: "simctl", "pair", watchDevice.udid, device.udid)
+        watchDevice.pair(to: device)
         BarManager.default.refresh()
     }
 }

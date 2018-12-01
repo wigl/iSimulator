@@ -120,6 +120,9 @@ extension Device {
             shell("/usr/bin/xcrun", arguments: "simctl", "unpair", udid)
         }
     }
+    func pair(to device: Device) {
+        shell("/usr/bin/xcrun", arguments: "simctl", "pair", self.udid, device.udid)
+    }
 }
 
 
