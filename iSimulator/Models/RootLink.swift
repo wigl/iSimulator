@@ -13,29 +13,28 @@ private let kDocumentName = "iSimulator"
 
 class RootLink {
     
+    static let queue = DispatchQueue(label: "iSimulator.update.queue")
+    
     static func update(with path: String, finish:@escaping (_ error: String?)->Void) {
         guard FileManager.default.fileExists(atPath: path) else {
             finish("Folder doesn't exist!")
             return
         }
         let linkURL = URL(fileURLWithPath: path).appendingPathComponent(kDocumentName)
-        defaultSubQueue.async {
-            DispatchQueue.main.async {
-                do {
-                    try FileManager.default.moveItem(at: self.url, to: linkURL)
-                    self.url = linkURL
-                    UserDefaults.standard.set(path, forKey: kUserDefaultDocumentKey)
-                    UserDefaults.standard.synchronize()
-                    finish(nil)
-                } catch {
-                    finish(error.localizedDescription)
-                }
+        self.queue.async {
+            do {
+                try FileManager.default.moveItem(at: self.url, to: linkURL)
+                self.url = linkURL
+                UserDefaults.standard.set(path, forKey: kUserDefaultDocumentKey)
+                UserDefaults.standard.synchronize()
+                finish(nil)
+            } catch {
+                finish(error.localizedDescription)
             }
         }
-        
     }
     
-    static var url: URL = {
+    static private(set) var url: URL = {
         var url: URL
         if let path = UserDefaults.standard.string(forKey: kUserDefaultDocumentKey) {
             url = URL(fileURLWithPath: path)

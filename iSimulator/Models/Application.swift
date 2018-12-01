@@ -37,6 +37,7 @@ class Application {
         self.bundleID = bundleID
         self.bundleDirUrl = bundleDirUrl
         self.sandboxDirUrl = sandboxDirUrl
+        
         guard let contents = try? FileManager.default.contentsOfDirectory(at: bundleDirUrl, includingPropertiesForKeys: nil, options: [.skipsSubdirectoryDescendants, .skipsHiddenFiles])
             else {
                 return nil

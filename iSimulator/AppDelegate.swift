@@ -21,8 +21,6 @@
 import Cocoa
 import Crashlytics
 
-let defaultSubQueue = DispatchQueue(label: "defaultSubQueue")
-
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
     

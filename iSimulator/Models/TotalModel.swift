@@ -10,6 +10,9 @@ import Foundation
 import AppKit
 import ObjectMapper
 
+// TO DO:
+let defaultSubQueue = DispatchQueue(label: "iSimulator.update.queue")
+
 class TotalModel: Mappable {
     static let `default` = TotalModel()
     var isForceUpdate = true
@@ -162,7 +165,11 @@ class TotalModel: Mappable {
         }
         // 删除不存在的app虚拟文件夹
         // 不在app deinit 方法里面 removeLinkDir， 因为deinit方法调用有延迟
-        self.appCache.urlAndAppDic.forEach { $0.value.removeLinkDir() }
+        self.appCache.urlAndAppDic.forEach { app in
+            RootLink.queue.async {
+                app.value.removeLinkDir()
+            }
+        }
         
         self.appCache.urlAndAppDic = urlAndAppDicCache
         self.appCache.sandboxURLs = sandboxURLsCache
