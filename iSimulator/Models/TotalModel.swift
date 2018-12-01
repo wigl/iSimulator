@@ -6,18 +6,22 @@
 //  Copyright © 2017年 niels.jin. All rights reserved.
 //
 
-import Foundation
 import AppKit
 import ObjectMapper
 
 class TotalModel: Mappable {
+    
     static let `default` = TotalModel()
     var isForceUpdate = true
-    var lastXcodePath = ""
-    var isXcode9OrGreater = false
-    var appCache = ApplicationCache()
     
-    func updateXcodeVersion() {
+    private var lastXcodePath = ""
+    private var isXcode9OrGreater = false
+    private var appCache = ApplicationCache()
+    
+    private func xcodePath() -> String {
+        return shell("/usr/bin/xcrun", arguments: "xcode-select", "-p").outStr
+    }
+    private func updateXcodeVersion() {
         var url = URL.init(fileURLWithPath: lastXcodePath)
         url.deleteLastPathComponent()
         url.appendPathComponent("Info.plist")
@@ -34,11 +38,11 @@ class TotalModel: Mappable {
     
     ///该方法： 耗时 && 阻塞
     func update() {
-        let xcodePath = shell("/usr/bin/xcrun", arguments: "xcode-select", "-p").outStr
+        let xcodePath = self.xcodePath()
         if lastXcodePath != xcodePath{
             isForceUpdate = true
             lastXcodePath = xcodePath
-            updateXcodeVersion()
+            //updateXcodeVersion()
         }
         if isForceUpdate {
             isForceUpdate = false

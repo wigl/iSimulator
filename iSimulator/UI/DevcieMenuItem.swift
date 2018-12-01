@@ -49,9 +49,6 @@ private func createDeviceActionItems(_ device: Device) -> [NSMenuItem] {
                                                 DeviceUnpairAction.self,
                                                 DeviceEraseAction.self,
                                                 DeviceDeleteAction.self]
-    if !TotalModel.default.isXcode9OrGreater && device.state == .shutdown {
-//        actionTypes.removeFirst()
-    }
     let actions = actionTypes.map { $0.init(device) }.filter { $0.isAvailable  }
     var items = actions.map { (action) -> NSMenuItem in
         let item = NSMenuItem.init(title: action.title, action: #selector(DeviceStateAction.perform), keyEquivalent: "")
