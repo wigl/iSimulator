@@ -19,6 +19,7 @@ class LogReport {
         
     }
     
+    @available(*, deprecated)
     func runtimeNilReport() {
         Crashlytics.sharedInstance().recordError(ReportError.runtimeNil, withAdditionalUserInfo: nil)
     }
@@ -39,6 +40,7 @@ class LogReport {
 
 enum ReportError: CustomNSError {
     
+    @available(*, deprecated)
     case runtimeNil
     
     static var errorDomain: String {

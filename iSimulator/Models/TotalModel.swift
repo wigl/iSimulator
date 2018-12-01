@@ -21,6 +21,7 @@ class TotalModel: Mappable {
     private func xcodePath() -> String {
         return shell("/usr/bin/xcrun", arguments: "xcode-select", "-p").outStr
     }
+    
     private func updateXcodeVersion() {
         var url = URL.init(fileURLWithPath: lastXcodePath)
         url.deleteLastPathComponent()
@@ -56,6 +57,7 @@ class TotalModel: Mappable {
     }
     
     var runtimes: [Runtime] = []
+    
     func runtimes(osType: Runtime.OSType) -> [Runtime] {
         return runtimes.filter{$0.name.contains(osType.rawValue)}
     }
@@ -75,9 +77,13 @@ class TotalModel: Mappable {
     
     private var pairs: [String: Pair] = [:]
     
-    private init() { }
+    private init() {
+        
+    }
     
-    required init?(map: Map) { }
+    required init?(map: Map) {
+        
+    }
     
     func mapping(map: Map) {
         runtimes.removeAll()
@@ -108,40 +114,34 @@ class TotalModel: Mappable {
             }
         }
         // 关联pair
-        var tempAllDevice: [Device] = []
-        devices.forEach { (_, value) in
-            tempAllDevice.append(contentsOf: value)
-        }
+        let tempAllDevice: [Device] = runtimes.flatMap { $0.devices }
         pairs.forEach { (key, pair) in
-            let watchDevices = tempAllDevice.filter({ (device) -> Bool in
+            let watch = tempAllDevice.first(where: { (device) -> Bool in
                 if let watch = pair.watch{
                     return device.udid == watch.udid
+                } else {
+                    return false
                 }
-                return false
             })
-            let phoneDevices = tempAllDevice.filter({ (device) -> Bool in
+            let phone = tempAllDevice.first(where: { (device) -> Bool in
                 if let phone = pair.phone{
                     return device.udid == phone.udid
-                }
-                return false
-            })
-            if let phone = phoneDevices.first, let watch = watchDevices.first {
-                if watch.runtime == nil || phone.runtime == nil {
-                    //上报错误
-                    LogReport.default.runtimeNilReport()
                 } else {
-                    watch.pairUDID = key
-                    phone.pairs.append(watch)
+                    return false
                 }
+            })
+            guard let w = watch, w.runtime != nil,
+                let p = phone, p.runtime != nil else {
+                return
             }
+            w.pairUDID = key
+            p.pairs.append(w)
         }
         // 更新缓存
         self.updateCache()
-        // 更新log状态
-        LogReport.default.logSimctlList()
     }
     
-    func updateCache() {
+    private func updateCache() {
         let applications = runtimes.flatMap { $0.devices }.flatMap { $0.applications }
         
         var urlAndAppDicCache: [URL: Application] = [:]

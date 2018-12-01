@@ -74,6 +74,8 @@ class BarManager {
         var hasAppDeviceItemDic: [String: [NSMenuItem]] = [:]
         var emptyAppDeviceItemDic: [String: [NSMenuItem]] = [:]
         TotalModel.default.update()
+        // 更新log状态
+        LogReport.default.logSimctlList()
         TotalModel.default.runtimes.forEach { (r) in
             var hasAppDeviceItems: [NSMenuItem] = []
             var emptyAppDeviceItems: [NSMenuItem] = []
