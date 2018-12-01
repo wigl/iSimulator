@@ -10,6 +10,7 @@ import Cocoa
 
 class BarManager {
     static let `default` = BarManager.init()
+    private let queue = DispatchQueue(label: "iSimulator.update.queue")
     private let statusItem: NSStatusItem
     private let menu = NSMenu()
     private var watch: SKQueue?
@@ -41,7 +42,7 @@ class BarManager {
     
     func refresh(wait deadline: Double = 0) {
         waitRefreshNum = waitRefreshNum + 1
-        defaultSubQueue.asyncAfter(deadline: .now() + deadline) {
+        self.queue.asyncAfter(deadline: .now() + deadline) {
             self.waitRefreshNum = self.waitRefreshNum - 1
             if self.waitRefreshNum != 0{
                 return

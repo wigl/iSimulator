@@ -10,9 +10,6 @@ import Foundation
 import AppKit
 import ObjectMapper
 
-// TO DO:
-let defaultSubQueue = DispatchQueue(label: "iSimulator.update.queue")
-
 class TotalModel: Mappable {
     static let `default` = TotalModel()
     var isForceUpdate = true
