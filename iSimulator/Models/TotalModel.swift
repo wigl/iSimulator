@@ -130,7 +130,7 @@ class TotalModel: Mappable {
                     LogReport.default.runtimeNilReport()
                 } else {
                     watch.pairUDID = key
-                    phone.pair.append(watch)
+                    phone.pairs.append(watch)
                 }
             }
         }

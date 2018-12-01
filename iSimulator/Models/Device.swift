@@ -10,16 +10,6 @@ import Foundation
 import ObjectMapper
 
 class Device: Mappable {
-    
-    static let url: URL = {
-        let userLibraryURL = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
-        return userLibraryURL.appendingPathComponent("Developer/CoreSimulator/Devices")
-    }()
-    
-    static let setURL: URL = {
-        return url.appendingPathComponent("device_set.plist")
-    }()
-    
     enum State: String {
         case booted = "Booted"
         case shutdown = "Shutdown"
@@ -30,7 +20,7 @@ class Device: Mappable {
     var udid = ""
     var applications: [Application] = []
     // 当设备为iPhone时候，配对的watch
-    var pair: [Device] = []
+    var pairs: [Device] = []
     // 当设备为watch的时候，配对UDID
     var pairUDID: String?
     weak var runtime: Runtime!
@@ -67,6 +57,18 @@ class Device: Mappable {
     var dataReportDic: [String: String] {
         return ["n": name, "id": udid]
     }
+}
+
+extension Device {
+    
+    static let url: URL = {
+        let userLibraryURL = FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask).first!
+        return userLibraryURL.appendingPathComponent("Developer/CoreSimulator/Devices")
+    }()
+    
+    static let setURL: URL = {
+        return url.appendingPathComponent("device_set.plist")
+    }()
 }
 
 // MARK: - device Action
@@ -138,7 +140,7 @@ extension Device {
                 app.device = self
                 apps.append(app)
             } else if cache.ignoreURLs.contains(url) {
-                //
+                //忽略
             } else {
                 newBundles.append(url)
             }
@@ -147,7 +149,7 @@ extension Device {
         var newSandboxs = [URL]()
         sandboxContents.enumerated().forEach { (offset, url) in
             if cache.sandboxURLs.contains(url) || cache.ignoreURLs.contains(url) {
-                //
+                //忽略
             } else {
                 newSandboxs.append(url)
             }
@@ -170,8 +172,8 @@ extension Device {
         idAndSandboxUrlDic.forEach({ (_, url) in
             cache.ignoreURLs.insert(url)
         })
-        // ⚠️⚠️所有app赋值成功后，再创建linkDir，否则无法判断app.bundleDisplayName是否重复⚠️⚠️
         self.applications = apps
+        // ⚠️⚠️所有app赋值成功后，再创建linkDir，否则无法判断app.bundleDisplayName是否重复⚠️⚠️
         DispatchQueue.main.async {
           self.applications.forEach{ $0.createLinkDir() }
         }

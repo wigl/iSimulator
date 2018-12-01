@@ -30,7 +30,7 @@ class DeviceMenuItem: NSMenuItem {
         deviceActionItems.forEach({ (item) in
             self.submenu?.addItem(item)
         })
-        if !device.pair.isEmpty{
+        if !device.pairs.isEmpty{
             self.submenu?.addItem(NSMenuItem.separator())
             pairActionItems(device).forEach({ (item) in
                 self.submenu?.addItem(item)
@@ -74,7 +74,7 @@ private func createDeviceActionItems(_ device: Device) -> [NSMenuItem] {
                 if watchDevice.pairUDID != nil {
                     return
                 }
-                if device.pair.contains(where: { $0.udid == device.udid }){
+                if device.pairs.contains(where: { $0.udid == device.udid }){
                     return
                 }
                 let action = DevicePairAction.init(device: device, watchDevice: watchDevice)
@@ -106,7 +106,7 @@ private func pairActionItems(_ device: Device) -> [NSMenuItem] {
     let item = NSMenuItem.init(title: "Paired Watches", action: nil, keyEquivalent: "")
     item.isEnabled = false
     items.append(item)
-    device.pair.forEach {
+    device.pairs.forEach {
         let item = DeviceMenuItem.init($0)
         item.indentationLevel = 1
         items.append(item)
