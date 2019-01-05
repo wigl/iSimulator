@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13529"/>
-        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -665,7 +664,7 @@
         <scene sceneID="P9e-Zi-kDu">
             <objects>
                 <windowController storyboardIdentifier="Preferences" id="THI-BN-Wc3" customClass="PreferencesWindowController" customModule="iSimulator" customModuleProvider="target" sceneMemberID="viewController">
-                    <window key="window" title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" oneShot="NO" frameAutosaveName="" animationBehavior="default" id="zeb-p6-tfc">
+                    <window key="window" title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" frameAutosaveName="" animationBehavior="default" id="zeb-p6-tfc">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES"/>
                         <windowPositionMask key="initialPositionMask" topStrut="YES" bottomStrut="YES"/>
                         <rect key="contentRect" x="0.0" y="466" width="480" height="270"/>
@@ -714,20 +713,20 @@
             <objects>
                 <viewController id="DTO-21-MCy" customClass="PreferencesViewController" customModule="iSimulator" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="BIT-Qn-M0h">
-                        <rect key="frame" x="0.0" y="0.0" width="480" height="216"/>
+                        <rect key="frame" x="0.0" y="0.0" width="454" height="154"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <tabView type="noTabsNoBorder" translatesAutoresizingMaskIntoConstraints="NO" id="CHe-bh-P1z">
-                                <rect key="frame" x="0.0" y="0.0" width="480" height="216"/>
+                                <rect key="frame" x="0.0" y="0.0" width="454" height="154"/>
                                 <font key="font" metaFont="system"/>
                                 <tabViewItems>
                                     <tabViewItem label="General" identifier="General" id="MMc-6q-Qow">
                                         <view key="view" id="KDL-DV-DI9">
-                                            <rect key="frame" x="0.0" y="0.0" width="480" height="165"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="454" height="154"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <button translatesAutoresizingMaskIntoConstraints="NO" id="7Qz-Ho-fMX">
-                                                    <rect key="frame" x="113" y="64" width="12" height="12"/>
+                                                    <rect key="frame" x="89" y="52" width="12" height="12"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" secondItem="7Qz-Ho-fMX" secondAttribute="height" multiplier="1:1" id="Kau-AZ-MlE"/>
                                                         <constraint firstAttribute="height" constant="12" id="jNM-eB-DYM"/>
@@ -741,26 +740,23 @@
                                                     </connections>
                                                 </button>
                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zRj-qP-QpB">
-                                                    <rect key="frame" x="48" y="116" width="384" height="34"/>
+                                                    <rect key="frame" x="18" y="100" width="418" height="34"/>
                                                     <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" title="iSimulator will create a folder that contains the app's bundle and sandbox. This will make access app's data easier." id="ZRh-MG-YAY">
                                                         <font key="font" metaFont="system"/>
-                                                        <color key="textColor" red="0.26051741839999998" green="0.2605243921" blue="0.260520637" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" name="systemGrayColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xlj-Lm-BI4">
-                                                    <rect key="frame" x="48" y="88" width="82" height="18"/>
+                                                    <rect key="frame" x="18" y="74" width="418" height="18"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Folder Path:" id="uZr-2x-LMU">
                                                         <font key="font" metaFont="system" size="14"/>
-                                                        <color key="textColor" name="selectedTextColor" catalog="System" colorSpace="catalog"/>
+                                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" preferredMaxLayoutWidth="371" translatesAutoresizingMaskIntoConstraints="NO" id="PdT-zi-aJi">
-                                                    <rect key="frame" x="48" y="61" width="65" height="17"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="370" id="eIv-kr-Flv"/>
-                                                    </constraints>
+                                                    <rect key="frame" x="18" y="49" width="65" height="17"/>
                                                     <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" title="iSimulator" id="wOI-0S-KIy">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
@@ -768,7 +764,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Qrd-YB-Iip">
-                                                    <rect key="frame" x="44" y="23" width="96" height="32"/>
+                                                    <rect key="frame" x="14" y="13" width="96" height="32"/>
                                                     <buttonCell key="cell" type="push" title="change..." bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="gtD-H4-VBB">
                                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                         <font key="font" metaFont="system"/>
@@ -779,30 +775,31 @@
                                                 </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="zRj-qP-QpB" secondAttribute="trailing" constant="50" id="0fd-4w-8Ml"/>
-                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="xlj-Lm-BI4" secondAttribute="trailing" constant="20" symbolic="YES" id="2RQ-rE-cnh"/>
-                                                <constraint firstAttribute="bottom" secondItem="Qrd-YB-Iip" secondAttribute="bottom" constant="30" id="73C-ST-JCK"/>
-                                                <constraint firstItem="zRj-qP-QpB" firstAttribute="leading" secondItem="KDL-DV-DI9" secondAttribute="leading" constant="50" id="D4l-2V-v3F"/>
-                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Qrd-YB-Iip" secondAttribute="trailing" constant="20" symbolic="YES" id="NKg-9v-Chc"/>
+                                                <constraint firstAttribute="trailing" secondItem="zRj-qP-QpB" secondAttribute="trailing" constant="20" symbolic="YES" id="0fd-4w-8Ml"/>
+                                                <constraint firstAttribute="trailing" secondItem="xlj-Lm-BI4" secondAttribute="trailing" constant="20" symbolic="YES" id="2RQ-rE-cnh"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="7Qz-Ho-fMX" secondAttribute="trailing" constant="20" symbolic="YES" id="3Hq-rY-s86"/>
+                                                <constraint firstAttribute="bottom" secondItem="Qrd-YB-Iip" secondAttribute="bottom" constant="20" symbolic="YES" id="73C-ST-JCK"/>
+                                                <constraint firstItem="zRj-qP-QpB" firstAttribute="leading" secondItem="KDL-DV-DI9" secondAttribute="leading" constant="20" symbolic="YES" id="D4l-2V-v3F"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Qrd-YB-Iip" secondAttribute="trailing" constant="20" symbolic="YES" id="NlE-cp-N5h"/>
                                                 <constraint firstItem="7Qz-Ho-fMX" firstAttribute="centerY" secondItem="PdT-zi-aJi" secondAttribute="centerY" id="Vdl-Rs-Oea"/>
-                                                <constraint firstItem="7Qz-Ho-fMX" firstAttribute="leading" secondItem="PdT-zi-aJi" secondAttribute="trailing" constant="2" id="agW-Fp-k0b"/>
-                                                <constraint firstItem="PdT-zi-aJi" firstAttribute="top" secondItem="xlj-Lm-BI4" secondAttribute="bottom" constant="10" id="bXq-jS-AHo"/>
+                                                <constraint firstItem="7Qz-Ho-fMX" firstAttribute="leading" secondItem="PdT-zi-aJi" secondAttribute="trailing" constant="8" symbolic="YES" id="agW-Fp-k0b"/>
+                                                <constraint firstItem="PdT-zi-aJi" firstAttribute="top" secondItem="xlj-Lm-BI4" secondAttribute="bottom" constant="8" symbolic="YES" id="bXq-jS-AHo"/>
                                                 <constraint firstItem="xlj-Lm-BI4" firstAttribute="leading" secondItem="zRj-qP-QpB" secondAttribute="leading" id="eHc-2a-dz7"/>
                                                 <constraint firstItem="Qrd-YB-Iip" firstAttribute="leading" secondItem="PdT-zi-aJi" secondAttribute="leading" id="fjC-um-luJ"/>
-                                                <constraint firstItem="Qrd-YB-Iip" firstAttribute="top" secondItem="PdT-zi-aJi" secondAttribute="bottom" constant="10" id="jcb-ei-CBm"/>
-                                                <constraint firstItem="xlj-Lm-BI4" firstAttribute="top" secondItem="zRj-qP-QpB" secondAttribute="bottom" constant="10" id="p1Z-v1-DnR"/>
-                                                <constraint firstItem="zRj-qP-QpB" firstAttribute="top" secondItem="KDL-DV-DI9" secondAttribute="top" constant="15" id="u2i-h3-Pes"/>
+                                                <constraint firstItem="Qrd-YB-Iip" firstAttribute="top" secondItem="PdT-zi-aJi" secondAttribute="bottom" constant="8" symbolic="YES" id="jcb-ei-CBm"/>
+                                                <constraint firstItem="xlj-Lm-BI4" firstAttribute="top" secondItem="zRj-qP-QpB" secondAttribute="bottom" constant="8" symbolic="YES" id="p1Z-v1-DnR"/>
+                                                <constraint firstItem="zRj-qP-QpB" firstAttribute="top" secondItem="KDL-DV-DI9" secondAttribute="top" constant="20" symbolic="YES" id="u2i-h3-Pes"/>
                                                 <constraint firstItem="PdT-zi-aJi" firstAttribute="leading" secondItem="xlj-Lm-BI4" secondAttribute="leading" id="zju-Ti-jTD"/>
                                             </constraints>
                                         </view>
                                     </tabViewItem>
                                     <tabViewItem label="About" identifier="About" id="JjJ-5c-yWa">
                                         <view key="view" id="7iy-8B-B59">
-                                            <rect key="frame" x="0.0" y="0.0" width="480" height="160"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="454" height="125"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="h3h-8P-7Ek">
-                                                    <rect key="frame" x="40" y="30" width="100" height="100"/>
+                                                    <rect key="frame" x="20" y="13" width="100" height="100"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="100" id="ACH-gv-6wC"/>
                                                         <constraint firstAttribute="width" constant="100" id="BRR-O6-XZs"/>
@@ -810,7 +807,7 @@
                                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="linkDirectory" id="DyF-Bk-X3F"/>
                                                 </imageView>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fBt-L7-u9V">
-                                                    <rect key="frame" x="178" y="104" width="133" height="36"/>
+                                                    <rect key="frame" x="126" y="69" width="310" height="36"/>
                                                     <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" title="iSimulator" id="EZf-6j-EGg">
                                                         <font key="font" metaFont="system" size="30"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -818,7 +815,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" preferredMaxLayoutWidth="200" translatesAutoresizingMaskIntoConstraints="NO" id="RFG-6g-J6W">
-                                                    <rect key="frame" x="178" y="83" width="89" height="17"/>
+                                                    <rect key="frame" x="126" y="44" width="310" height="17"/>
                                                     <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" title="Version 1.0 (1)" id="d88-Wy-JV4">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -826,7 +823,7 @@
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qEs-el-JTl">
-                                                    <rect key="frame" x="178" y="30" width="187" height="32"/>
+                                                    <rect key="frame" x="126" y="20" width="310" height="16"/>
                                                     <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" title="Copyright © 2017年 niels.jin. All rights reserved." id="8aD-SR-6WI">
                                                         <font key="font" metaFont="cellTitle"/>
                                                         <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
@@ -835,38 +832,38 @@
                                                 </textField>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="qEs-el-JTl" firstAttribute="top" secondItem="RFG-6g-J6W" secondAttribute="bottom" constant="8" symbolic="YES" id="5Fk-xG-vaB"/>
                                                 <constraint firstItem="qEs-el-JTl" firstAttribute="leading" secondItem="RFG-6g-J6W" secondAttribute="leading" id="CeX-yJ-bFe"/>
-                                                <constraint firstItem="fBt-L7-u9V" firstAttribute="top" secondItem="7iy-8B-B59" secondAttribute="top" constant="20" id="D0d-AB-oYI"/>
-                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="RFG-6g-J6W" secondAttribute="trailing" constant="40" id="G2L-d2-ajf"/>
-                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="fBt-L7-u9V" secondAttribute="trailing" constant="40" id="HJm-Kn-EiL"/>
-                                                <constraint firstAttribute="bottom" secondItem="qEs-el-JTl" secondAttribute="bottom" constant="30" id="JbY-GX-orR"/>
+                                                <constraint firstItem="fBt-L7-u9V" firstAttribute="top" secondItem="7iy-8B-B59" secondAttribute="top" constant="20" symbolic="YES" id="D0d-AB-oYI"/>
+                                                <constraint firstAttribute="trailing" secondItem="RFG-6g-J6W" secondAttribute="trailing" constant="20" symbolic="YES" id="G2L-d2-ajf"/>
+                                                <constraint firstAttribute="trailing" secondItem="fBt-L7-u9V" secondAttribute="trailing" constant="20" symbolic="YES" id="HJm-Kn-EiL"/>
+                                                <constraint firstAttribute="bottom" secondItem="qEs-el-JTl" secondAttribute="bottom" constant="20" symbolic="YES" id="JbY-GX-orR"/>
                                                 <constraint firstItem="RFG-6g-J6W" firstAttribute="leading" secondItem="fBt-L7-u9V" secondAttribute="leading" id="Uh8-g1-saa"/>
-                                                <constraint firstItem="RFG-6g-J6W" firstAttribute="top" secondItem="fBt-L7-u9V" secondAttribute="bottom" constant="4" id="VOa-87-7V4"/>
-                                                <constraint firstItem="fBt-L7-u9V" firstAttribute="leading" secondItem="h3h-8P-7Ek" secondAttribute="trailing" constant="40" id="bAb-tx-kRt"/>
-                                                <constraint firstAttribute="bottom" secondItem="h3h-8P-7Ek" secondAttribute="bottom" constant="30" id="eSS-fs-bzf"/>
-                                                <constraint firstItem="h3h-8P-7Ek" firstAttribute="leading" secondItem="7iy-8B-B59" secondAttribute="leading" constant="40" id="hy7-9n-Ph7"/>
-                                                <constraint firstItem="h3h-8P-7Ek" firstAttribute="top" secondItem="7iy-8B-B59" secondAttribute="top" constant="30" id="wCh-nt-qqk"/>
-                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="qEs-el-JTl" secondAttribute="trailing" constant="40" id="zZJ-Vc-pj0"/>
+                                                <constraint firstItem="RFG-6g-J6W" firstAttribute="top" secondItem="fBt-L7-u9V" secondAttribute="bottom" constant="8" symbolic="YES" id="VOa-87-7V4"/>
+                                                <constraint firstItem="fBt-L7-u9V" firstAttribute="leading" secondItem="h3h-8P-7Ek" secondAttribute="trailing" constant="8" symbolic="YES" id="bAb-tx-kRt"/>
+                                                <constraint firstItem="h3h-8P-7Ek" firstAttribute="leading" secondItem="7iy-8B-B59" secondAttribute="leading" constant="20" symbolic="YES" id="hy7-9n-Ph7"/>
+                                                <constraint firstItem="h3h-8P-7Ek" firstAttribute="centerY" secondItem="7iy-8B-B59" secondAttribute="centerY" id="qpO-HI-IuT"/>
+                                                <constraint firstAttribute="trailing" secondItem="qEs-el-JTl" secondAttribute="trailing" constant="20" symbolic="YES" id="zZJ-Vc-pj0"/>
                                             </constraints>
                                         </view>
                                     </tabViewItem>
                                     <tabViewItem label="Xcode Select" identifier="Xcode Select" id="NWw-V8-Yxe">
                                         <view key="view" id="Lzi-Xy-v6e">
-                                            <rect key="frame" x="0.0" y="0.0" width="480" height="216"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="454" height="210"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gaD-sM-mk4">
-                                                    <rect key="frame" x="48" y="128" width="384" height="68"/>
+                                                    <rect key="frame" x="18" y="122" width="418" height="68"/>
                                                     <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" id="SOL-gJ-Cwi">
                                                         <font key="font" metaFont="system"/>
                                                         <string key="title">iSimulator depends on Xcode command line tools, if you do not see the simulator you want, please change the path to the active developer directory.
 You can use the following two ways:</string>
-                                                        <color key="textColor" red="0.26051741839999998" green="0.2605243921" blue="0.260520637" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" name="systemGrayColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iqr-Va-UcE">
-                                                    <rect key="frame" x="48" y="102" width="88" height="18"/>
+                                                    <rect key="frame" x="18" y="96" width="418" height="18"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Terminal.app" id="u0E-aK-VVS">
                                                         <font key="font" metaFont="system" size="14"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -874,7 +871,7 @@ You can use the following two ways:</string>
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mC8-cO-NFG">
-                                                    <rect key="frame" x="48" y="52" width="74" height="18"/>
+                                                    <rect key="frame" x="18" y="45" width="418" height="18"/>
                                                     <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Xcode.app" id="XHT-ZH-VPT">
                                                         <font key="font" metaFont="system" size="14"/>
                                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -882,7 +879,7 @@ You can use the following two ways:</string>
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Yw-Xa-dpp">
-                                                    <rect key="frame" x="48" y="80" width="227" height="17"/>
+                                                    <rect key="frame" x="18" y="71" width="418" height="17"/>
                                                     <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" title="Usage: sudo xcode-select -s &lt;path&gt;" id="8ZU-zb-8kB">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
@@ -890,7 +887,7 @@ You can use the following two ways:</string>
                                                     </textFieldCell>
                                                 </textField>
                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WTb-OF-D2M">
-                                                    <rect key="frame" x="48" y="30" width="299" height="17"/>
+                                                    <rect key="frame" x="18" y="20" width="418" height="17"/>
                                                     <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" title="Preferences -&gt; Locations -&gt; Command line tools" id="1zg-jL-GXi">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="disabledControlTextColor" catalog="System" colorSpace="catalog"/>
@@ -899,21 +896,21 @@ You can use the following two ways:</string>
                                                 </textField>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="2Yw-Xa-dpp" secondAttribute="trailing" constant="50" id="05I-zO-iAZ"/>
-                                                <constraint firstItem="iqr-Va-UcE" firstAttribute="top" secondItem="gaD-sM-mk4" secondAttribute="bottom" constant="8" id="4XY-4x-CTD"/>
-                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="iqr-Va-UcE" secondAttribute="trailing" constant="50" id="AVZ-6Z-6bL"/>
-                                                <constraint firstItem="gaD-sM-mk4" firstAttribute="top" secondItem="Lzi-Xy-v6e" secondAttribute="top" constant="20" id="Jne-gP-Bod"/>
-                                                <constraint firstAttribute="bottom" secondItem="WTb-OF-D2M" secondAttribute="bottom" constant="30" id="PSy-ac-2DP"/>
+                                                <constraint firstAttribute="trailing" secondItem="2Yw-Xa-dpp" secondAttribute="trailing" constant="20" symbolic="YES" id="05I-zO-iAZ"/>
+                                                <constraint firstItem="iqr-Va-UcE" firstAttribute="top" secondItem="gaD-sM-mk4" secondAttribute="bottom" constant="8" symbolic="YES" id="4XY-4x-CTD"/>
+                                                <constraint firstAttribute="trailing" secondItem="iqr-Va-UcE" secondAttribute="trailing" constant="20" symbolic="YES" id="AVZ-6Z-6bL"/>
+                                                <constraint firstItem="gaD-sM-mk4" firstAttribute="top" secondItem="Lzi-Xy-v6e" secondAttribute="top" constant="20" symbolic="YES" id="Jne-gP-Bod"/>
+                                                <constraint firstAttribute="bottom" secondItem="WTb-OF-D2M" secondAttribute="bottom" constant="20" symbolic="YES" id="PSy-ac-2DP"/>
                                                 <constraint firstItem="2Yw-Xa-dpp" firstAttribute="leading" secondItem="iqr-Va-UcE" secondAttribute="leading" id="Wqr-5K-RGn"/>
-                                                <constraint firstItem="WTb-OF-D2M" firstAttribute="top" secondItem="mC8-cO-NFG" secondAttribute="bottom" constant="5" id="bOf-CG-NkE"/>
+                                                <constraint firstItem="WTb-OF-D2M" firstAttribute="top" secondItem="mC8-cO-NFG" secondAttribute="bottom" constant="8" symbolic="YES" id="bOf-CG-NkE"/>
                                                 <constraint firstItem="mC8-cO-NFG" firstAttribute="leading" secondItem="2Yw-Xa-dpp" secondAttribute="leading" id="bqD-wl-TcU"/>
-                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="WTb-OF-D2M" secondAttribute="trailing" constant="50" id="e36-FB-RAq"/>
-                                                <constraint firstItem="mC8-cO-NFG" firstAttribute="top" secondItem="2Yw-Xa-dpp" secondAttribute="bottom" constant="10" id="gTX-9i-h7B"/>
-                                                <constraint firstItem="gaD-sM-mk4" firstAttribute="leading" secondItem="Lzi-Xy-v6e" secondAttribute="leading" constant="50" id="huq-P4-rv9"/>
-                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="mC8-cO-NFG" secondAttribute="trailing" constant="50" id="khu-hy-PDq"/>
+                                                <constraint firstAttribute="trailing" secondItem="WTb-OF-D2M" secondAttribute="trailing" constant="20" symbolic="YES" id="e36-FB-RAq"/>
+                                                <constraint firstItem="mC8-cO-NFG" firstAttribute="top" secondItem="2Yw-Xa-dpp" secondAttribute="bottom" constant="8" symbolic="YES" id="gTX-9i-h7B"/>
+                                                <constraint firstItem="gaD-sM-mk4" firstAttribute="leading" secondItem="Lzi-Xy-v6e" secondAttribute="leading" constant="20" symbolic="YES" id="huq-P4-rv9"/>
+                                                <constraint firstAttribute="trailing" secondItem="mC8-cO-NFG" secondAttribute="trailing" constant="20" symbolic="YES" id="khu-hy-PDq"/>
                                                 <constraint firstItem="iqr-Va-UcE" firstAttribute="leading" secondItem="gaD-sM-mk4" secondAttribute="leading" id="mUW-0b-gPJ"/>
-                                                <constraint firstAttribute="trailing" secondItem="gaD-sM-mk4" secondAttribute="trailing" constant="50" id="ppa-6I-scy"/>
-                                                <constraint firstItem="2Yw-Xa-dpp" firstAttribute="top" secondItem="iqr-Va-UcE" secondAttribute="bottom" constant="5" id="ruH-Pf-HDS"/>
+                                                <constraint firstAttribute="trailing" secondItem="gaD-sM-mk4" secondAttribute="trailing" constant="20" symbolic="YES" id="ppa-6I-scy"/>
+                                                <constraint firstItem="2Yw-Xa-dpp" firstAttribute="top" secondItem="iqr-Va-UcE" secondAttribute="bottom" constant="8" symbolic="YES" id="ruH-Pf-HDS"/>
                                                 <constraint firstItem="WTb-OF-D2M" firstAttribute="leading" secondItem="mC8-cO-NFG" secondAttribute="leading" id="uPF-KD-mxt"/>
                                             </constraints>
                                         </view>
@@ -943,7 +940,7 @@ You can use the following two ways:</string>
     </scenes>
     <resources>
         <image name="NSFollowLinkFreestandingTemplate" width="14" height="14"/>
-        <image name="NSPreferencesGeneral" width="32" height="32"/>
+        <image name="NSPreferencesGeneral" width="128" height="128"/>
         <image name="Xcode" width="128" height="128"/>
         <image name="about" width="128" height="128"/>
         <image name="linkDirectory" width="256" height="256"/>
