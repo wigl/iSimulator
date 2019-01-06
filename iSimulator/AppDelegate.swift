@@ -11,6 +11,7 @@
  https://github.com/facebook/FBSimulatorControl
  https://github.com/fastlane/fastlane
  https://github.com/luosheng/OpenSim
+ https://github.com/lincf0912/iSimulator
  UI参考：
  https://github.com/noodlewerk/NWPusher
  https://github.com/shadowsocks/ShadowsocksX-NG
