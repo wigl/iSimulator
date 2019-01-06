@@ -741,7 +741,7 @@
                                                 </button>
                                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" setsMaxLayoutWidthAtFirstLayout="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zRj-qP-QpB">
                                                     <rect key="frame" x="18" y="100" width="418" height="34"/>
-                                                    <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" title="iSimulator will create a folder that contains the app's bundle and sandbox. This will make access app's data easier." id="ZRh-MG-YAY">
+                                                    <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" title="iSimulator will create a folder that contains the app's bundle and sandbox. This will make accessing the app's data easier." id="ZRh-MG-YAY">
                                                         <font key="font" metaFont="system"/>
                                                         <color key="textColor" name="systemGrayColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -856,8 +856,8 @@
                                                     <rect key="frame" x="18" y="122" width="418" height="68"/>
                                                     <textFieldCell key="cell" selectable="YES" sendsActionOnEndEditing="YES" id="SOL-gJ-Cwi">
                                                         <font key="font" metaFont="system"/>
-                                                        <string key="title">iSimulator depends on Xcode command line tools, if you do not see the simulator you want, please change the path to the active developer directory.
-You can use the following two ways:</string>
+                                                        <string key="title">iSimulator depends on the Xcode command line tools. If you do not see the simulator that you want, please change the path to the active developer directory.
+You can use one the following ways:</string>
                                                         <color key="textColor" name="systemGrayColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
