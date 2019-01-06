@@ -27,6 +27,7 @@ class AppMenu: NSMenu {
     private func addCustomItem() {
         let actionTypes: [AppActionable.Type] = [AppShowInFinderAction.self,
                                                  AppLaunchAction.self,
+                                                 AppResetAction.self,
                                                  AppTerminateAction.self,
                                                  AppUninstallAction.self]
         actionTypes.forEach { (ActionType) in
@@ -34,7 +35,7 @@ class AppMenu: NSMenu {
             if !action.isAvailable {
                 return
             }
-            let item = NSMenuItem.init(title: action.title, action: #selector(DeviceStateAction.perform), keyEquivalent: "")
+            let item = NSMenuItem.init(title: action.title, action: #selector(AppShowInFinderAction.perform), keyEquivalent: "")
             item.target = action as AnyObject
             item.image = action.icon
             item.representedObject = action
@@ -62,7 +63,7 @@ class AppMenu: NSMenu {
                     return
                 }
                 let action = DeviceLaunchOtherAppAction.init(app: app, device: device)
-                let item = NSMenuItem.init(title: device.name, action: #selector(DeviceStateAction.perform), keyEquivalent: "")
+                let item = NSMenuItem.init(title: device.name, action: #selector(action.perform), keyEquivalent: "")
                 item.target = action as AnyObject
                 item.representedObject = action
                 appDeviceItems.append(item)
@@ -155,7 +156,7 @@ class DeviceLaunchOtherAppAction: AppActionable {
         self.title = device.name
     }
     @objc func perform() {
-        device.installApp(app.appUrl.path)
+        device.installApp(app)
         device.launch(appBundleId: app.bundleID)
     }
     var isAvailable: Bool = true
@@ -190,6 +191,32 @@ class AppTerminateAction: AppActionable {
     var icon: NSImage?
 }
 
+class AppResetAction: AppActionable {
+    var app: Application
+    required init(_ app: Application) {
+        self.app = app
+    }
+    var title: String = "Reset Content..."
+    @objc func perform() {
+        let alert: NSAlert = NSAlert()
+        alert.messageText = String(format: "Are you sure you want to Reset Content %@ from %@?", app.bundleDisplayName, app.device.name)
+        alert.informativeText = "All of sandbox data in this application will be remove."
+        alert.alertStyle = .critical
+        alert.addButton(withTitle: "Reset")
+        alert.addButton(withTitle: "Cancel")
+        NSApp.activate(ignoringOtherApps: true)
+        let response = alert.runModal()
+        if response == NSApplication.ModalResponse.alertFirstButtonReturn {
+            app.resetContent()
+        }
+        
+    }
+    var isAvailable: Bool {
+        return true
+    }
+    var icon: NSImage?
+}
+
 class AppUninstallAction: AppActionable {
     var app: Application
     required init(_ app: Application) {
@@ -206,7 +233,7 @@ class AppUninstallAction: AppActionable {
         NSApp.activate(ignoringOtherApps: true)
         let response = alert.runModal()
         if response == NSApplication.ModalResponse.alertFirstButtonReturn {
-            try? app.uninstall()
+            app.uninstall()
         }
         
     }

@@ -15,6 +15,11 @@ enum Availability: String {
 }
 
 class Runtime: Mappable {
+    
+    enum OSType: String {
+        case iOS, tvOS, watchOS, None
+    }
+    
     var buildversion = ""
     var availability = Availability.unavailable
     var name = ""
@@ -33,11 +38,10 @@ class Runtime: Mappable {
             return .None
         }
     }
-    enum OSType: String {
-        case iOS,tvOS,watchOS,None
-    }
     
-    required init?(map: Map) { }
+    required init?(map: Map) {
+        
+    }
     
     func mapping(map: Map) {
         buildversion <- map["buildversion"]

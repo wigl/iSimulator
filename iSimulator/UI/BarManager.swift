@@ -10,15 +10,13 @@ import Cocoa
 
 class BarManager {
     static let `default` = BarManager.init()
+    private let queue = DispatchQueue(label: "iSimulator.update.queue")
     private let statusItem: NSStatusItem
     private let menu = NSMenu()
     private var watch: SKQueue?
     private var deviceInfoWatch: FileWatch?
-    /*
-     监控设备、模拟器数量、App数量，可能watch和deviceInfoWatch短时间内给出多个回调
-     增加该变量，控制刷新频率
-     */
-    private var waitRefreshNum = 0
+    private var refreshTask: DispatchWorkItem?
+    
     private init() {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         statusItem.image = #imageLiteral(resourceName: "statusItem_icon")
@@ -34,18 +32,15 @@ class BarManager {
     private func addWatch() {
         watch = SKQueue({ [weak self] (noti, _) in
             if noti.contains(.Write) && noti.contains(.SizeIncrease) {
-                self?.refresh(wait: 1)
+                self?.refresh()
             }
         })
     }
     
-    func refresh(wait deadline: Double = 0) {
-        waitRefreshNum = waitRefreshNum + 1
-        defaultSubQueue.asyncAfter(deadline: .now() + deadline) {
-            self.waitRefreshNum = self.waitRefreshNum - 1
-            if self.waitRefreshNum != 0{
-                return
-            }
+    func refresh() {
+        refreshTask?.cancel()
+        let task = DispatchWorkItem { [weak self] in
+            guard let `self` = self else { return }
             let deviceItems = self.deviceItems()
             DispatchQueue.main.async {
                 self.menu.removeAllItems()
@@ -63,6 +58,8 @@ class BarManager {
                 })
             }
         }
+        self.refreshTask = task
+        self.queue.asyncAfter(deadline: .now() + 0.75, execute: task)
     }
     
     private func deviceItems() -> [NSMenuItem] {
@@ -73,6 +70,8 @@ class BarManager {
         var hasAppDeviceItemDic: [String: [NSMenuItem]] = [:]
         var emptyAppDeviceItemDic: [String: [NSMenuItem]] = [:]
         TotalModel.default.update()
+        // 更新log状态
+        LogReport.default.logSimctlList()
         TotalModel.default.runtimes.forEach { (r) in
             var hasAppDeviceItems: [NSMenuItem] = []
             var emptyAppDeviceItems: [NSMenuItem] = []
@@ -106,7 +105,7 @@ class BarManager {
         DispatchQueue.main.async {
             self.deviceInfoWatch = try? FileWatch(paths: deviceInfoURLPath, createFlag: [.UseCFTypes, .FileEvents], runLoop: .current, latency: 1, eventHandler: { [weak self] (event) in
                 if event.flag.contains(.ItemIsFile) && event.flag.contains(.ItemRenamed) {
-                    self?.refresh(wait: 0.5)
+                    self?.refresh()
                 }
             })
         }
@@ -137,17 +136,6 @@ class BarManager {
         return items
     }
     
-    @objc private func deviceOnOrOff(_ sender: NSMenuItem) {
-        if let device = sender.representedObject as? Device {
-            switch device.state {
-            case .booted:
-                try? device.shutdown()
-            case .shutdown:
-                try? device.boot()
-            }
-        }
-    }
-    
     //MARK: - Common Items and Actions
     private lazy var commonItems: [NSMenuItem] = {
         var items: [NSMenuItem] = []
@@ -176,6 +164,7 @@ class BarManager {
     @objc private func preference(_ sender: NSMenuItem) {
         if let controller = preferenceWindowController {
             controller.close()
+            preferenceWindowController = nil
         }
         let title = sender.title
         if title == "Xcode Select..." {

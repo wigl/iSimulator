@@ -6,17 +6,23 @@
 //  Copyright © 2017年 niels.jin. All rights reserved.
 //
 
-import Foundation
 import AppKit
 import ObjectMapper
 
 class TotalModel: Mappable {
+    
     static let `default` = TotalModel()
     var isForceUpdate = true
-    var lastXcodePath = ""
-    var isXcode9OrGreater = false
     
-    func updateXcodeVersion() {
+    private var lastXcodePath = ""
+    private var isXcode9OrGreater = false
+    private var appCache = ApplicationCache()
+    
+    private func xcodePath() -> String {
+        return shell("/usr/bin/xcrun", arguments: "xcode-select", "-p").outStr
+    }
+    
+    private func updateXcodeVersion() {
         var url = URL.init(fileURLWithPath: lastXcodePath)
         url.deleteLastPathComponent()
         url.appendPathComponent("Info.plist")
@@ -33,35 +39,25 @@ class TotalModel: Mappable {
     
     ///该方法： 耗时 && 阻塞
     func update() {
-        let xcodePath = shell("/usr/bin/xcrun", arguments: "xcode-select", "-p").0
+        let xcodePath = self.xcodePath()
         if lastXcodePath != xcodePath{
             isForceUpdate = true
             lastXcodePath = xcodePath
-            updateXcodeVersion()
+            //updateXcodeVersion()
         }
         if isForceUpdate {
             isForceUpdate = false
-            Device.bundleURLAppsCache = [:]
-            Device.sandboxURLs = []
-            let contents = try? FileManager.default.contentsOfDirectory(at: Device.linkURL, includingPropertiesForKeys: [.isHiddenKey], options: [.skipsPackageDescendants, .skipsSubdirectoryDescendants])
-            if let contents = contents{
-                for url in contents {
-                    if let last = url.pathComponents.last,
-                        last == "Icon\r"{
-                        try? FileManager.default.removeItem(at: Device.linkURL)
-                    }
-                }
+            appCache = ApplicationCache()
+            DispatchQueue.main.async {
+                RootLink.createDir()
             }
-            
-            try? FileManager.default.removeItem(at: Device.linkURL)
-            try? FileManager.default.createDirectory(at: Device.linkURL, withIntermediateDirectories: true)
-            NSWorkspace.shared.setIcon(#imageLiteral(resourceName: "linkDirectory"), forFile: Device.linkURL.path, options:[])
         }
-        let jsonStr = shell("/usr/bin/xcrun", arguments: "simctl", "list", "-j").0
+        let jsonStr = shell("/usr/bin/xcrun", arguments: "simctl", "list", "-j").outStr
         _ = Mapper().map(JSONString: jsonStr, toObject: TotalModel.default)
     }
     
     var runtimes: [Runtime] = []
+    
     func runtimes(osType: Runtime.OSType) -> [Runtime] {
         return runtimes.filter{$0.name.contains(osType.rawValue)}
     }
@@ -81,9 +77,13 @@ class TotalModel: Mappable {
     
     private var pairs: [String: Pair] = [:]
     
-    private init() { }
+    private init() {
+        
+    }
     
-    required init?(map: Map) { }
+    required init?(map: Map) {
+        
+    }
     
     func mapping(map: Map) {
         runtimes.removeAll()
@@ -110,60 +110,60 @@ class TotalModel: Mappable {
             r.devices.forEach{
                 $0.runtime = r
                 //⚠️⚠️关联之后，再更新device的APP，否则取不到device的runtime⚠️⚠️
-                $0.updateApps()
+                $0.updateApps(with: appCache)
             }
         }
         // 关联pair
-        var tempAllDevice: [Device] = []
-        devices.forEach { (_, value) in
-            tempAllDevice.append(contentsOf: value)
-        }
+        let tempAllDevice: [Device] = runtimes.flatMap { $0.devices }
         pairs.forEach { (key, pair) in
-            let watchDevices = tempAllDevice.filter({ (device) -> Bool in
+            let watch = tempAllDevice.first(where: { (device) -> Bool in
                 if let watch = pair.watch{
                     return device.udid == watch.udid
+                } else {
+                    return false
                 }
-                return false
             })
-            let phoneDevices = tempAllDevice.filter({ (device) -> Bool in
+            let phone = tempAllDevice.first(where: { (device) -> Bool in
                 if let phone = pair.phone{
                     return device.udid == phone.udid
-                }
-                return false
-            })
-            if let phone = phoneDevices.first, let watch = watchDevices.first {
-                if watch.runtime == nil || phone.runtime == nil {
-                    //上报错误
-                    LogReport.default.runtimeNilReport()
                 } else {
-                    watch.pairUDID = key
-                    phone.pair.append(watch)
+                    return false
                 }
+            })
+            guard let w = watch, w.runtime != nil,
+                let p = phone, p.runtime != nil else {
+                return
             }
+            w.pairUDID = key
+            p.pairs.append(w)
         }
         // 更新缓存
-        Device.sandboxURLs = []
-        var bundleURLAppsCacheTemp: [URL: Application] = [:]
-        var sandboxURLsTemp: Set<URL> = []
-        devices.forEach { (_, arr) in
-            arr.forEach({ (d) in
-                d.applications.forEach({ (app) in
-                    //添加至临时缓存
-                    bundleURLAppsCacheTemp[app.bundleDirUrl] = app
-                    sandboxURLsTemp.insert(app.sandboxDirUrl)
-                    //从旧的缓存中移除
-                    Device.bundleURLAppsCache.removeValue(forKey: app.bundleDirUrl)
-                    Device.sandboxURLs.remove(app.sandboxDirUrl)
-                })
-            })
-        }
-        // 缓存中剩余的App删除linkDir
-        // 不在app deinit 方法里面 removeLinkDir， 因为deinit方法调用有延迟
-        Device.bundleURLAppsCache.forEach{$0.value.removeLinkDir()}
-        Device.bundleURLAppsCache = bundleURLAppsCacheTemp
-        Device.sandboxURLs = sandboxURLsTemp
+        self.updateCache()
+    }
+    
+    private func updateCache() {
+        let applications = runtimes.flatMap { $0.devices }.flatMap { $0.applications }
         
-        LogReport.default.logSimctlList()
+        var urlAndAppDicCache: [URL: Application] = [:]
+        var sandboxURLsCache: Set<URL> = []
+        
+        applications.forEach { (app) in
+            //添加至临时缓存
+            urlAndAppDicCache[app.bundleDirUrl] = app
+            sandboxURLsCache.insert(app.sandboxDirUrl)
+            //从旧的缓存中移除
+            self.appCache.urlAndAppDic.removeValue(forKey: app.bundleDirUrl)
+            self.appCache.sandboxURLs.remove(app.sandboxDirUrl)
+        }
+        // 删除不存在的app虚拟文件夹
+        // 不在app deinit 方法里面 removeLinkDir， 因为deinit方法调用有延迟
+        let invalidApp = self.appCache.urlAndAppDic
+        DispatchQueue.main.async {
+            invalidApp.forEach { $0.value.removeLinkDir() }
+        }
+        
+        self.appCache.urlAndAppDic = urlAndAppDicCache
+        self.appCache.sandboxURLs = sandboxURLsCache
     }
     
     var dataReportDic: [String: Any] {

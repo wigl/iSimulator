@@ -85,12 +85,11 @@ class DeviceCreateAction {
             if !nameField.stringValue.isEmpty {
                 simName = nameField.stringValue
             }
-            let str = shell("/usr/bin/xcrun", arguments: "simctl", "create", simName, deviceType.identifier, runtime.identifier)
-            print(str)
-            if str.0.isEmpty{
-                createFail(error: str.1, name: simName)
+            let result = shell("/usr/bin/xcrun", arguments: "simctl", "create", simName, deviceType.identifier, runtime.identifier)
+            if result.outStr.isEmpty{
+                createFail(error: result.err, name: simName)
             }else{
-                createSuccess(udid: str.0, name: simName)
+                createSuccess(udid: result.outStr, name: simName)
             }
         }
     }

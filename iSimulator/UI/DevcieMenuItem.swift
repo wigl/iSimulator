@@ -30,7 +30,7 @@ class DeviceMenuItem: NSMenuItem {
         deviceActionItems.forEach({ (item) in
             self.submenu?.addItem(item)
         })
-        if !device.pair.isEmpty{
+        if !device.pairs.isEmpty{
             self.submenu?.addItem(NSMenuItem.separator())
             pairActionItems(device).forEach({ (item) in
                 self.submenu?.addItem(item)
@@ -49,9 +49,6 @@ private func createDeviceActionItems(_ device: Device) -> [NSMenuItem] {
                                                 DeviceUnpairAction.self,
                                                 DeviceEraseAction.self,
                                                 DeviceDeleteAction.self]
-    if !TotalModel.default.isXcode9OrGreater && device.state == .shutdown {
-//        actionTypes.removeFirst()
-    }
     let actions = actionTypes.map { $0.init(device) }.filter { $0.isAvailable  }
     var items = actions.map { (action) -> NSMenuItem in
         let item = NSMenuItem.init(title: action.title, action: #selector(DeviceStateAction.perform), keyEquivalent: "")
@@ -74,7 +71,7 @@ private func createDeviceActionItems(_ device: Device) -> [NSMenuItem] {
                 if watchDevice.pairUDID != nil {
                     return
                 }
-                if device.pair.contains(where: { $0.udid == device.udid }){
+                if device.pairs.contains(where: { $0.udid == device.udid }){
                     return
                 }
                 let action = DevicePairAction.init(device: device, watchDevice: watchDevice)
@@ -106,7 +103,7 @@ private func pairActionItems(_ device: Device) -> [NSMenuItem] {
     let item = NSMenuItem.init(title: "Paired Watches", action: nil, keyEquivalent: "")
     item.isEnabled = false
     items.append(item)
-    device.pair.forEach {
+    device.pairs.forEach {
         let item = DeviceMenuItem.init($0)
         item.indentationLevel = 1
         items.append(item)
@@ -140,8 +137,10 @@ class DevicePairAction: DeviceActionable {
     }
 
     @objc func perform() {
-        shell("/usr/bin/xcrun", arguments: "simctl", "pair", watchDevice.udid, device.udid)
-        BarManager.default.refresh()
+        watchDevice.pair(to: device)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            BarManager.default.refresh()
+        }
     }
 }
 
@@ -160,6 +159,9 @@ class DeviceUnpairAction: DeviceActionable {
     
     @objc func perform() {
         device.unpair()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            BarManager.default.refresh()
+        }
     }
     
 }

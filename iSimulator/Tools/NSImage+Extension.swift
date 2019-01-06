@@ -32,7 +32,7 @@ extension NSImage {
 }
 
 extension Array where Element:Equatable {
-    func removeDuplicates() -> ([Element], [Element]) {
+    func divideDuplicates() -> (result: [Element], duplicates: [Element]) {
         var result = [Element]()
         var duplicates = [Element]()
         for value in self {
