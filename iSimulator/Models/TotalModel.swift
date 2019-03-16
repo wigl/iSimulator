@@ -96,7 +96,16 @@ class TotalModel: Mappable {
         pairs <- map["pairs"]
         // 关联 runtime 和 device/devicetype
         runtimes.forEach{ r in
-            r.devices = self.devices[r.name] ?? []
+            if self.devices[r.name] != nil {
+                r.devices = self.devices[r.name] ?? []
+            } else {
+                let name = r.name
+                let type = name.components(separatedBy: " ").first
+                let version = name.components(separatedBy: " ").last
+                let realVersion = version?.components(separatedBy: ".").joined(separator: "-")
+                let realName = "com.apple.CoreSimulator.SimRuntime." + (type ?? "") + "-" + (realVersion ?? "")
+                r.devices = self.devices[realName] ?? []
+            }
             switch r.osType {
             case .iOS:
                 r.devicetypes = self.iOSDevicetypes
