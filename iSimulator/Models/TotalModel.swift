@@ -96,7 +96,7 @@ class TotalModel: Mappable {
         pairs <- map["pairs"]
         // 关联 runtime 和 device/devicetype
         runtimes.forEach{ r in
-            r.devices = self.devices[r.name] ?? []
+            r.devices = self.devices[r.name] ?? (self.devices[r.identifier] ?? [])
             switch r.osType {
             case .iOS:
                 r.devicetypes = self.iOSDevicetypes
