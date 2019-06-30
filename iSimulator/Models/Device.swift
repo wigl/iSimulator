@@ -19,6 +19,7 @@ class Device: Mappable {
     var name = ""
     var udid = ""
     var applications: [Application] = []
+    var appGroups: [AppGroup] = []
     // 当设备为iPhone时候，配对的watch
     var pairs: [Device] = []
     // 当设备为watch的时候，配对UDID
@@ -33,6 +34,9 @@ class Device: Mappable {
     }
     var bundleURL: URL {
         return Device.url.appendingPathComponent("\(self.udid)/data/Containers/Bundle/Application")
+    }
+    var appGroupURL: URL {
+        return Device.url.appendingPathComponent("\(self.udid)/data/Containers/Shared/AppGroup")
     }
     /// 用于监控Device状态
     var infoURL: URL {
@@ -125,6 +129,32 @@ extension Device {
     }
 }
 
+extension Device {
+    
+    func updateAppGroups(with cache: AppGroupCache) {
+        let appGroupContents = (try? FileManager.default.contentsOfDirectory(at: appGroupURL, includingPropertiesForKeys: [.isDirectoryKey], options: [.skipsHiddenFiles, .skipsPackageDescendants, .skipsSubdirectoryDescendants])) ?? []
+        var appGroups: [AppGroup] = []
+        appGroupContents.enumerated().forEach { (offset, url) in
+            let group = cache.groups.first { (appGroup) -> Bool in
+                appGroup.fileURL == url
+            }
+            if let appGroup = group {
+                appGroups.append(appGroup)
+            } else {
+                if let id = identifier(with: url) {
+                    let appGroup = AppGroup.init(fileURL: url, id: id)
+                    appGroups.append(appGroup)
+                }
+            }
+        }
+        appGroups = appGroups.filter { !$0.id.contains("com.apple") }
+        self.appGroups = appGroups
+        DispatchQueue.main.async {
+            self.appGroups.forEach{ $0.createLinkDir(device: self) }
+        }
+    }
+}
+
 
 // MARK: - 获取APP：方式1
 extension Device {
@@ -185,12 +215,19 @@ extension Device {
     private func identifierAndUrl(with urls: [URL]) -> [String: URL] {
         var dic: [String: URL] = [:]
         urls.forEach { (url) in
-            if let contents = NSDictionary(contentsOf: url.appendingPathComponent(".com.apple.mobile_container_manager.metadata.plist")),
-                let identifier = contents["MCMMetadataIdentifier"] as? String {
+            if let identifier = self.identifier(with: url) {
                 dic[identifier] = url
             }
         }
         return dic
+    }
+    
+    private func identifier(with url: URL) -> String? {
+        if let contents = NSDictionary(contentsOf: url.appendingPathComponent(".com.apple.mobile_container_manager.metadata.plist")),
+            let identifier = contents["MCMMetadataIdentifier"] as? String {
+            return identifier
+        }
+        return nil
     }
 }
 
