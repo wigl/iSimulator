@@ -17,6 +17,7 @@ class TotalModel: Mappable {
     private var lastXcodePath = ""
     private var isXcode9OrGreater = false
     private var appCache = ApplicationCache()
+    private var groupCache = AppGroupCache()
     
     private func xcodePath() -> String {
         return shell("/usr/bin/xcrun", arguments: "xcode-select", "-p").outStr
@@ -48,6 +49,7 @@ class TotalModel: Mappable {
         if isForceUpdate {
             isForceUpdate = false
             appCache = ApplicationCache()
+            groupCache = AppGroupCache()
             DispatchQueue.main.async {
                 RootLink.createDir()
             }
@@ -111,6 +113,7 @@ class TotalModel: Mappable {
                 $0.runtime = r
                 //⚠️⚠️关联之后，再更新device的APP，否则取不到device的runtime⚠️⚠️
                 $0.updateApps(with: appCache)
+                $0.updateAppGroups(with: groupCache)
             }
         }
         // 关联pair

@@ -21,9 +21,9 @@ class FBSimTool {
     
     var control: FBSimulatorControl? = {
         let options = FBSimulatorManagementOptions()
-        let config = FBSimulatorControlConfiguration(deviceSetPath: nil, options: options)
         let logger = FBControlCoreGlobalConfiguration.defaultLogger
-        let control = try? FBSimulatorControl.withConfiguration(config, logger: logger)
+        let config = FBSimulatorControlConfiguration.init(deviceSetPath: nil, options: options, logger: logger, reporter: nil)
+        let control = try? FBSimulatorControl.withConfiguration(config)
         return control
     }()
     
@@ -32,7 +32,7 @@ class FBSimTool {
         if let sim = sims.first {
             let future = sim.boot()
             try future.await(withTimeout: 20)
-            try sim.focus()
+            sim.focus()
         }else{
             throw NSError.init(domain: "Boot Failed!", code: -1, userInfo: nil)
         }
@@ -86,8 +86,7 @@ class FBSimTool {
     func launchApp(device: Device, app: Application) throws {
         let sims = allSimulators.filter { $0.udid == device.udid }
         if let sim = sims.first {
-            let bundle = FBApplicationBundle.init(name: app.bundleDisplayName, path: app.appUrl.path, bundleID: app.bundleID, binary: nil)
-            let appLunch = FBApplicationLaunchConfiguration.init(application: bundle, arguments: [], environment: [:], waitForDebugger: false, output: FBProcessOutputConfiguration.defaultOutputToFile())
+            let appLunch = FBApplicationLaunchConfiguration.init(bundleID: app.bundleID, bundleName: app.bundleDisplayName, arguments: [], environment: [:], output: FBProcessOutputConfiguration.defaultOutputToFile(), launchMode: .foregroundIfRunning)
             let _ = sim.launchApplication(appLunch)
         }else{
             throw NSError.init(domain: "Lunch Failed!", code: -1, userInfo: nil)

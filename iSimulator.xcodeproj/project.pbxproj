@@ -28,6 +28,7 @@
 		29AFDFCC1FBD339000544CE5 /* DeviceTypeItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AFDFCB1FBD339000544CE5 /* DeviceTypeItem.swift */; };
 		29B227BA1FBD7B9F00BDE5BF /* PreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B227B91FBD7B9F00BDE5BF /* PreferencesViewController.swift */; };
 		29B591981F581513006CDEC0 /* FileWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B591971F581513006CDEC0 /* FileWatch.swift */; };
+		315A809D22C90616005C2493 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315A809C22C90616005C2493 /* AppGroup.swift */; };
 		3198338A21A7F5FF004ADEE3 /* XCTestBootstrap.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3198338321A7F5FE004ADEE3 /* XCTestBootstrap.framework */; };
 		3198338B21A7F5FF004ADEE3 /* XCTestBootstrap.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3198338321A7F5FE004ADEE3 /* XCTestBootstrap.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3198338C21A7F5FF004ADEE3 /* Fabric.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3198338421A7F5FE004ADEE3 /* Fabric.framework */; };
@@ -91,6 +92,7 @@
 		29AFDFCB1FBD339000544CE5 /* DeviceTypeItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceTypeItem.swift; sourceTree = "<group>"; };
 		29B227B91FBD7B9F00BDE5BF /* PreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesViewController.swift; sourceTree = "<group>"; };
 		29B591971F581513006CDEC0 /* FileWatch.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileWatch.swift; sourceTree = "<group>"; };
+		315A809C22C90616005C2493 /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppGroup.swift; sourceTree = "<group>"; };
 		3198338321A7F5FE004ADEE3 /* XCTestBootstrap.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTestBootstrap.framework; path = Carthage/Build/Mac/XCTestBootstrap.framework; sourceTree = "<group>"; };
 		3198338421A7F5FE004ADEE3 /* Fabric.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Fabric.framework; path = Carthage/Build/Mac/Fabric.framework; sourceTree = "<group>"; };
 		3198338521A7F5FE004ADEE3 /* FBDeviceControl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBDeviceControl.framework; path = Carthage/Build/Mac/FBDeviceControl.framework; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				29157C591F4D65D70069BDB6 /* DeviceType.swift */,
 				29157C5D1F4D66220069BDB6 /* Device.swift */,
 				29157C611F4D7EB90069BDB6 /* Application.swift */,
+				315A809C22C90616005C2493 /* AppGroup.swift */,
 				29AFDFAF1FBBDA6E00544CE5 /* Pair.swift */,
 				31CD6D0321B2942300E49DC0 /* ApplicationCache.swift */,
 				31CD6D0121B2817900E49DC0 /* RootLink.swift */,
@@ -261,7 +264,7 @@
 			};
 			buildConfigurationList = 292EAD9B1F458B3D009FC1ED /* Build configuration list for PBXProject "iSimulator" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -335,6 +338,7 @@
 				291157AE1FB5501C000EE94F /* DevcieMenuItem.swift in Sources */,
 				31CD6D0421B2942300E49DC0 /* ApplicationCache.swift in Sources */,
 				29B591981F581513006CDEC0 /* FileWatch.swift in Sources */,
+				315A809D22C90616005C2493 /* AppGroup.swift in Sources */,
 				292EADB61F458F5C009FC1ED /* BarManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -482,7 +486,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -506,7 +510,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};

@@ -21,3 +21,7 @@ class ApplicationCache {
         
     }
 }
+
+class AppGroupCache {
+    var groups: Set<AppGroup> = []
+}
