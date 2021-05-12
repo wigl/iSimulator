@@ -79,6 +79,7 @@ extension Device {
 extension Device {
     func boot() throws {
         shell("/usr/bin/xcrun", arguments: "simctl", "boot", self.udid)
+        shell("/usr/bin/open", arguments: "-a", "simulator")
     }
     
     func shutdown() throws {
