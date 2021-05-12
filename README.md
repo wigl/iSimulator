@@ -31,16 +31,12 @@ iSimulator is a GUI utility to control the Simulator, and manage the app install
 
 ## Usage
 
-Download [App](https://github.com/wigl/iSimulator/releases/download/3.2.2/iSimulator.zip) and run.
-
-## Build from the code
-
-Don't use `carthage bootstrap`, because `FBSimulatorControl` have extra scheme that carthage can not build.
- 
-Please run script with the following:`./carthageBootstrap.sh` to checkout and build dependencies.
-
+Download [App](https://github.com/wigl/iSimulator/releases/download/3.3.0/iSimulator.zip) and run.
 
 ## Requirements
+
+- **macOS 10.15+**
+- **Xcode 12.0+**
 
 iSimulator depends on Xcode command line tools, if you do not see the simulator you want, please change the path to the active developer directory.
 You can use the following two ways:
