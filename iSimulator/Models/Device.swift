@@ -78,13 +78,11 @@ extension Device {
 // MARK: - device Action
 extension Device {
     func boot() throws {
-        //        shell("/usr/bin/xcrun", arguments: "simctl", "boot", self.udid)
-        try? FBSimTool.default.boot(self.udid)
+        shell("/usr/bin/xcrun", arguments: "simctl", "boot", self.udid)
     }
     
     func shutdown() throws {
-        //        shell("/usr/bin/xcrun", arguments: "simctl", "shutdown", self.udid)
-        try? FBSimTool.default.shutdown(self.udid)
+        shell("/usr/bin/xcrun", arguments: "simctl", "shutdown", self.udid)
     }
     
     func erase() throws {

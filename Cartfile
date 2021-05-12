@@ -1,3 +1,1 @@
-github "facebook/FBSimulatorControl" "7687aca"
-github "Hearst-DD/ObjectMapper" == 3.5.1
-binary "Crashlytics.json"
+github "Hearst-DD/ObjectMapper" == 4.2.0
