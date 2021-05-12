@@ -212,7 +212,7 @@ class DeviceEraseAction: DeviceActionable {
         textView.drawsBackground = false
         let prefixStr = "This action will make device reset to its initial state.\n The device udid:\n"
         let udidStr = device.udid
-        let att = NSMutableAttributedString(string: prefixStr + udidStr)
+        let att = NSMutableAttributedString(string: prefixStr + udidStr, attributes: [.foregroundColor : NSColor.textColor])
         att.addAttributes([NSAttributedString.Key.font: NSFont.boldSystemFont(ofSize: 11)], range: NSRange(location: prefixStr.count, length: udidStr.count))
         textView.textStorage?.append(att)
         alert.accessoryView = textView

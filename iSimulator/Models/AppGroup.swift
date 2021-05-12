@@ -46,13 +46,13 @@ extension AppGroup {
             url.appendPathComponent(device.name)
         }
         url.appendPathComponent("AppGroupSandBox")
-        url.appendPathComponent(self.id)
         do {
             try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
-            self.linkURL = url
         } catch {
             return
         }
+        url.appendPathComponent(self.id)
+        self.linkURL = url
         createSymbolicLink(at: url, withDestinationURL: fileURL)
     }
     
