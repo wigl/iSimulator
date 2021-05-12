@@ -10,7 +10,7 @@ public struct SKQueueNotification: OptionSet {
         self.rawValue = rawValue
     }
     
-    public static let None             = SKQueueNotification(rawValue: 0)
+    public static let None             = SKQueueNotification([])
     public static let Rename           = SKQueueNotification(rawValue: 1 << 0)
     public static let Write            = SKQueueNotification(rawValue: 1 << 1)
     public static let Delete           = SKQueueNotification(rawValue: 1 << 2)
