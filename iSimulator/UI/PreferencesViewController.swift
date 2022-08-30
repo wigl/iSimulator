@@ -83,3 +83,10 @@ extension PreferencesViewController {
         alert.beginSheetModal(for: self.view.window!, completionHandler: nil)
     }
 }
+
+extension PreferencesViewController {
+    @IBAction func checkForUpdate(_ sender: Any) {
+        let url = "https://github.com/wigl/iSimulator/releases"
+        NSWorkspace.shared.open(URL(string: url)!)
+    }
+}
