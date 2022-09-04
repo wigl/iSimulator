@@ -830,16 +830,28 @@
                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                     </textFieldCell>
                                                 </textField>
+                                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="nu2-JA-Xl4">
+                                                    <rect key="frame" x="222" y="41" width="127" height="19"/>
+                                                    <buttonCell key="cell" type="roundRect" title="Check For Update..." bezelStyle="roundedRect" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Yrk-FL-FEf">
+                                                        <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                        <font key="font" metaFont="cellTitle"/>
+                                                    </buttonCell>
+                                                    <connections>
+                                                        <action selector="checkForUpdate:" target="DTO-21-MCy" id="3jG-43-9W9"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="qEs-el-JTl" firstAttribute="top" secondItem="RFG-6g-J6W" secondAttribute="bottom" constant="8" symbolic="YES" id="5Fk-xG-vaB"/>
+                                                <constraint firstItem="nu2-JA-Xl4" firstAttribute="centerY" secondItem="RFG-6g-J6W" secondAttribute="centerY" id="7nq-cS-E0I"/>
                                                 <constraint firstItem="qEs-el-JTl" firstAttribute="leading" secondItem="RFG-6g-J6W" secondAttribute="leading" id="CeX-yJ-bFe"/>
                                                 <constraint firstItem="fBt-L7-u9V" firstAttribute="top" secondItem="7iy-8B-B59" secondAttribute="top" constant="20" symbolic="YES" id="D0d-AB-oYI"/>
-                                                <constraint firstAttribute="trailing" secondItem="RFG-6g-J6W" secondAttribute="trailing" constant="20" symbolic="YES" id="G2L-d2-ajf"/>
                                                 <constraint firstAttribute="trailing" secondItem="fBt-L7-u9V" secondAttribute="trailing" constant="20" symbolic="YES" id="HJm-Kn-EiL"/>
                                                 <constraint firstAttribute="bottom" secondItem="qEs-el-JTl" secondAttribute="bottom" constant="20" symbolic="YES" id="JbY-GX-orR"/>
                                                 <constraint firstItem="RFG-6g-J6W" firstAttribute="leading" secondItem="fBt-L7-u9V" secondAttribute="leading" id="Uh8-g1-saa"/>
                                                 <constraint firstItem="RFG-6g-J6W" firstAttribute="top" secondItem="fBt-L7-u9V" secondAttribute="bottom" constant="8" symbolic="YES" id="VOa-87-7V4"/>
+                                                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="nu2-JA-Xl4" secondAttribute="trailing" constant="20" id="Wdj-e9-5Pc"/>
+                                                <constraint firstItem="nu2-JA-Xl4" firstAttribute="leading" secondItem="RFG-6g-J6W" secondAttribute="trailing" constant="8" id="X4e-CQ-96K"/>
                                                 <constraint firstItem="fBt-L7-u9V" firstAttribute="leading" secondItem="h3h-8P-7Ek" secondAttribute="trailing" constant="8" symbolic="YES" id="bAb-tx-kRt"/>
                                                 <constraint firstItem="h3h-8P-7Ek" firstAttribute="leading" secondItem="7iy-8B-B59" secondAttribute="leading" constant="20" symbolic="YES" id="hy7-9n-Ph7"/>
                                                 <constraint firstItem="h3h-8P-7Ek" firstAttribute="centerY" secondItem="7iy-8B-B59" secondAttribute="centerY" id="qpO-HI-IuT"/>
