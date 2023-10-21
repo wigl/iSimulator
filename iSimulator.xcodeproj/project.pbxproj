@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -30,7 +30,6 @@
 		315A809D22C90616005C2493 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315A809C22C90616005C2493 /* AppGroup.swift */; };
 		31CD6D0221B2817900E49DC0 /* RootLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CD6D0121B2817900E49DC0 /* RootLink.swift */; };
 		31CD6D0421B2942300E49DC0 /* ApplicationCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CD6D0321B2942300E49DC0 /* ApplicationCache.swift */; };
-		8CA3047E2AE34B8F008869B1 /* ObjectMapper in Frameworks */ = {isa = PBXBuildFile; productRef = 8CA3047D2AE34B8F008869B1 /* ObjectMapper */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,7 +66,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8CA3047E2AE34B8F008869B1 /* ObjectMapper in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,7 +169,6 @@
 			);
 			name = iSimulator;
 			packageProductDependencies = (
-				8CA3047D2AE34B8F008869B1 /* ObjectMapper */,
 			);
 			productName = iSimulator;
 			productReference = 292EADA01F458B3D009FC1ED /* iSimulator.app */;
@@ -208,7 +205,6 @@
 			);
 			mainGroup = 292EAD971F458B3D009FC1ED;
 			packageReferences = (
-				8CA3047C2AE34B8F008869B1 /* XCRemoteSwiftPackageReference "ObjectMapper" */,
 			);
 			productRefGroup = 292EADA11F458B3D009FC1ED /* Products */;
 			projectDirPath = "";
@@ -380,8 +376,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
@@ -400,10 +395,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				INFOPLIST_FILE = iSimulator/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 3.3.0;
 				OTHER_CODE_SIGN_FLAGS = "";
@@ -429,10 +421,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				INFOPLIST_FILE = iSimulator/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
 				MARKETING_VERSION = 3.3.0;
 				OTHER_CODE_SIGN_FLAGS = "";
@@ -466,25 +455,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		8CA3047C2AE34B8F008869B1 /* XCRemoteSwiftPackageReference "ObjectMapper" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Hearst-DD/ObjectMapper";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.2.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		8CA3047D2AE34B8F008869B1 /* ObjectMapper */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 8CA3047C2AE34B8F008869B1 /* XCRemoteSwiftPackageReference "ObjectMapper" */;
-			productName = ObjectMapper;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 292EAD981F458B3D009FC1ED /* Project object */;
 }

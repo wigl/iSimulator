@@ -7,11 +7,10 @@
 //
 
 import AppKit
-import ObjectMapper
 
-class TotalModel: Mappable {
+final class TotalModel: Decodable {
     
-    static let `default` = TotalModel()
+    static var `default` = TotalModel()
     var isForceUpdate = true
     
     private var lastXcodePath = ""
@@ -55,7 +54,14 @@ class TotalModel: Mappable {
             }
         }
         let jsonStr = shell("/usr/bin/xcrun", arguments: "simctl", "list", "-j").outStr
-        _ = Mapper().map(JSONString: jsonStr, toObject: TotalModel.default)
+        
+        if let jsonData = jsonStr.data(using: .utf8) {
+            do {
+                TotalModel.default = try JSONDecoder().decode(TotalModel.self, from: jsonData)
+            } catch {
+                print("Error decoding TotalModel: \(error)")
+            }
+        }
     }
     
     var runtimes: [Runtime] = []
@@ -83,19 +89,20 @@ class TotalModel: Mappable {
         
     }
     
-    required init?(map: Map) {
-        
+    enum CodingKeys: CodingKey {
+        case runtimes
+        case devicetypes
+        case devices
+        case pairs
     }
     
-    func mapping(map: Map) {
-        runtimes.removeAll()
-        devicetypes.removeAll()
-        devices.removeAll()
-        pairs.removeAll()
-        runtimes <- map["runtimes"]
-        devicetypes <- map["devicetypes"]
-        devices <- map["devices"]
-        pairs <- map["pairs"]
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        runtimes = try container.decode([Runtime].self, forKey: .runtimes)
+        devicetypes = try container.decode([DeviceType].self, forKey: .devicetypes)
+        devices = try container.decode([String: [Device]].self, forKey: .devices)
+        pairs = try container.decode([String: Pair].self, forKey: .pairs)
+        
         // 关联 runtime 和 device/devicetype
         runtimes.forEach{ r in
             r.devices = self.devices[r.name] ?? (self.devices[r.identifier] ?? [])

@@ -7,22 +7,24 @@
 //
 
 import Foundation
-import ObjectMapper
 
-class Pair: Mappable {
+struct Pair: Decodable {
     
-    var watch: Device?
-    var phone: Device?
-    var state = ""
+    let watch: Device?
+    let phone: Device?
+    let state: String
     
-    required init?(map: Map) {
-        
+    enum CodingKeys: CodingKey {
+        case watch
+        case phone
+        case state
     }
     
-    func mapping(map: Map) {
-        watch <- map["watch"]
-        phone <- map["phone"]
-        state <- map["state"]
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        watch = try container.decodeIfPresent(Device.self, forKey: .watch)
+        phone = try container.decodeIfPresent(Device.self, forKey: .phone)
+        state = try container.decode(String.self, forKey: .state)
     }
     
     var dataReportDic: [String: String] {
