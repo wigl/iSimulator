@@ -31,8 +31,6 @@
 		31CD6D0221B2817900E49DC0 /* RootLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CD6D0121B2817900E49DC0 /* RootLink.swift */; };
 		31CD6D0421B2942300E49DC0 /* ApplicationCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CD6D0321B2942300E49DC0 /* ApplicationCache.swift */; };
 		8CA3047E2AE34B8F008869B1 /* ObjectMapper in Frameworks */ = {isa = PBXBuildFile; productRef = 8CA3047D2AE34B8F008869B1 /* ObjectMapper */; };
-		CFDB43E0264BCE6E0075BDDC /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = CFDB43DF264BCE6E0075BDDC /* Cartfile */; };
-		CFDB43E4264BD5E50075BDDC /* Cartfile.resolved in Resources */ = {isa = PBXBuildFile; fileRef = CFDB43E3264BD5E50075BDDC /* Cartfile.resolved */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,8 +60,6 @@
 		3198338821A7F5FE004ADEE3 /* ObjectMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ObjectMapper.framework; path = Carthage/Build/Mac/ObjectMapper.framework; sourceTree = "<group>"; };
 		31CD6D0121B2817900E49DC0 /* RootLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootLink.swift; sourceTree = "<group>"; };
 		31CD6D0321B2942300E49DC0 /* ApplicationCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationCache.swift; sourceTree = "<group>"; };
-		CFDB43DF264BCE6E0075BDDC /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = SOURCE_ROOT; };
-		CFDB43E3264BD5E50075BDDC /* Cartfile.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.resolved; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,7 +121,6 @@
 		292EADA21F458B3D009FC1ED /* iSimulator */ = {
 			isa = PBXGroup;
 			children = (
-				CFDB43DE264BCE5D0075BDDC /* Support */,
 				29157C581F4D62940069BDB6 /* Models */,
 				29157C531F4D56310069BDB6 /* Tools */,
 				292EADB21F458C89009FC1ED /* UI */,
@@ -157,15 +152,6 @@
 				3198338821A7F5FE004ADEE3 /* ObjectMapper.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		CFDB43DE264BCE5D0075BDDC /* Support */ = {
-			isa = PBXGroup;
-			children = (
-				CFDB43DF264BCE6E0075BDDC /* Cartfile */,
-				CFDB43E3264BD5E50075BDDC /* Cartfile.resolved */,
-			);
-			name = Support;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -238,9 +224,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CFDB43E0264BCE6E0075BDDC /* Cartfile in Resources */,
 				292EADA81F458B3D009FC1ED /* Assets.xcassets in Resources */,
-				CFDB43E4264BD5E50075BDDC /* Cartfile.resolved in Resources */,
 				292EADAB1F458B3D009FC1ED /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
