@@ -7,48 +7,68 @@
 //
 
 import Foundation
-import ObjectMapper
 
-enum Availability: String {
-    case available = "(available)"
-    case unavailable = "(unavailable, runtime profile not found)"
+enum Availability: Decodable {
+    case available, unavailable
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        
+        switch rawValue {
+        case "(available)":
+            self = .available
+        case "(unavailable, runtime profile not found)", "(unavailable)":
+            self = .unavailable
+        default:
+            throw DecodingError.valueNotFound(String.self, .init(codingPath: decoder.codingPath, debugDescription: "Unknown Availability type \(rawValue)"))
+        }
+    }
 }
 
-class Runtime: Mappable {
+final class Runtime: Decodable {
     
     enum OSType: String {
         case iOS, tvOS, watchOS, None
     }
     
-    var buildversion = ""
-    var availability = Availability.unavailable
-    var name = ""
-    var identifier = ""
-    var version = ""
-    var devices: [Device] = []
-    var devicetypes: [DeviceType] = []
+    let buildversion: String
+    let availability: Availability
+    let name: String
+    let identifier: String
+    let version: String
+    var devices: [Device]
+    var devicetypes: [DeviceType]
+    
     var osType: OSType{
-        if name.contains("iOS"){
+        if name.contains("iOS") {
             return .iOS
-        }else if name.contains("tvOS"){
+        } else if name.contains("tvOS") {
             return .tvOS
-        }else if name.contains("watchOS"){
+        } else if name.contains("watchOS") {
             return .watchOS
-        }else{
+        } else{
             return .None
         }
     }
     
-    required init?(map: Map) {
-        
+    enum CodingKeys: CodingKey {
+        case buildversion
+        case availability
+        case name
+        case identifier
+        case version
     }
     
-    func mapping(map: Map) {
-        buildversion <- map["buildversion"]
-        availability <- (map["availability"], EnumTransform())
-        name <- map["name"]
-        identifier <- map["identifier"]
-        version <- map["version"]
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        buildversion = try container.decode(String.self, forKey: .buildversion)
+        availability = try container.decodeIfPresent(Availability.self, forKey: .availability) ?? .unavailable
+        name = try container.decode(String.self, forKey: .name)
+        identifier = try container.decode(String.self, forKey: .identifier)
+        version = try container.decode(String.self, forKey: .version)
+        devices = []
+        devicetypes = []
     }
     
     var dataReportDic: [String: String] {

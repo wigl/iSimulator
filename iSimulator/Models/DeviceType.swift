@@ -7,17 +7,20 @@
 //
 
 import Foundation
-import ObjectMapper
 
-class DeviceType: Mappable {
-    var name = ""
-    var identifier = ""
+struct DeviceType: Decodable {
+    let name: String
+    let identifier: String
     
-    required init?(map: Map) { }
+    enum CodingKeys: CodingKey {
+        case name
+        case identifier
+    }
     
-    func mapping(map: Map) {
-        name <- map["name"]
-        identifier <- map["identifier"]
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        name = try container.decode(String.self, forKey: .name)
+        identifier = try container.decode(String.self, forKey: .identifier)
     }
     
     var dataReportDic: [String: String] {

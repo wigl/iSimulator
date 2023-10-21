@@ -28,27 +28,9 @@
 		29B227BA1FBD7B9F00BDE5BF /* PreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B227B91FBD7B9F00BDE5BF /* PreferencesViewController.swift */; };
 		29B591981F581513006CDEC0 /* FileWatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29B591971F581513006CDEC0 /* FileWatch.swift */; };
 		315A809D22C90616005C2493 /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 315A809C22C90616005C2493 /* AppGroup.swift */; };
-		3198339421A7F5FF004ADEE3 /* ObjectMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3198338821A7F5FE004ADEE3 /* ObjectMapper.framework */; };
-		3198339521A7F5FF004ADEE3 /* ObjectMapper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3198338821A7F5FE004ADEE3 /* ObjectMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		31CD6D0221B2817900E49DC0 /* RootLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CD6D0121B2817900E49DC0 /* RootLink.swift */; };
 		31CD6D0421B2942300E49DC0 /* ApplicationCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31CD6D0321B2942300E49DC0 /* ApplicationCache.swift */; };
-		CFDB43E0264BCE6E0075BDDC /* Cartfile in Resources */ = {isa = PBXBuildFile; fileRef = CFDB43DF264BCE6E0075BDDC /* Cartfile */; };
-		CFDB43E4264BD5E50075BDDC /* Cartfile.resolved in Resources */ = {isa = PBXBuildFile; fileRef = CFDB43E3264BD5E50075BDDC /* Cartfile.resolved */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		3198338221A7F5D7004ADEE3 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				3198339521A7F5FF004ADEE3 /* ObjectMapper.framework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		291157AD1FB5501C000EE94F /* DevcieMenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevcieMenuItem.swift; sourceTree = "<group>"; };
@@ -77,8 +59,6 @@
 		3198338821A7F5FE004ADEE3 /* ObjectMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ObjectMapper.framework; path = Carthage/Build/Mac/ObjectMapper.framework; sourceTree = "<group>"; };
 		31CD6D0121B2817900E49DC0 /* RootLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootLink.swift; sourceTree = "<group>"; };
 		31CD6D0321B2942300E49DC0 /* ApplicationCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationCache.swift; sourceTree = "<group>"; };
-		CFDB43DF264BCE6E0075BDDC /* Cartfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Cartfile; sourceTree = SOURCE_ROOT; };
-		CFDB43E3264BD5E50075BDDC /* Cartfile.resolved */ = {isa = PBXFileReference; lastKnownFileType = text; path = Cartfile.resolved; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,7 +66,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3198339421A7F5FF004ADEE3 /* ObjectMapper.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,7 +119,6 @@
 		292EADA21F458B3D009FC1ED /* iSimulator */ = {
 			isa = PBXGroup;
 			children = (
-				CFDB43DE264BCE5D0075BDDC /* Support */,
 				29157C581F4D62940069BDB6 /* Models */,
 				29157C531F4D56310069BDB6 /* Tools */,
 				292EADB21F458C89009FC1ED /* UI */,
@@ -174,15 +152,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		CFDB43DE264BCE5D0075BDDC /* Support */ = {
-			isa = PBXGroup;
-			children = (
-				CFDB43DF264BCE6E0075BDDC /* Cartfile */,
-				CFDB43E3264BD5E50075BDDC /* Cartfile.resolved */,
-			);
-			name = Support;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -193,13 +162,14 @@
 				292EAD9C1F458B3D009FC1ED /* Sources */,
 				292EAD9D1F458B3D009FC1ED /* Frameworks */,
 				292EAD9E1F458B3D009FC1ED /* Resources */,
-				3198338221A7F5D7004ADEE3 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = iSimulator;
+			packageProductDependencies = (
+			);
 			productName = iSimulator;
 			productReference = 292EADA01F458B3D009FC1ED /* iSimulator.app */;
 			productType = "com.apple.product-type.application";
@@ -234,6 +204,8 @@
 				Base,
 			);
 			mainGroup = 292EAD971F458B3D009FC1ED;
+			packageReferences = (
+			);
 			productRefGroup = 292EADA11F458B3D009FC1ED /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -248,9 +220,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CFDB43E0264BCE6E0075BDDC /* Cartfile in Resources */,
 				292EADA81F458B3D009FC1ED /* Assets.xcassets in Resources */,
-				CFDB43E4264BD5E50075BDDC /* Cartfile.resolved in Resources */,
 				292EADAB1F458B3D009FC1ED /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

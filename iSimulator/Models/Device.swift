@@ -7,10 +7,9 @@
 //
 
 import Foundation
-import ObjectMapper
 
-class Device: Mappable {
-    enum State: String {
+final class Device: Decodable {
+    enum State: String, Decodable {
         case booted = "Booted"
         case shutdown = "Shutdown"
     }
@@ -47,15 +46,19 @@ class Device: Mappable {
         
     }
     
-    required init?(map: Map) {
-        
+    enum CodingKeys: CodingKey {
+        case state
+        case availability
+        case name
+        case udid
     }
     
-    func mapping(map: Map) {
-        state <- (map["state"], EnumTransform())
-        availability <- (map["availability"], EnumTransform())
-        name <- map["name"]
-        udid <- map["udid"]
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        state = try container.decode(Device.State.self, forKey: .state)
+        availability = try container.decodeIfPresent(Availability.self, forKey: .availability) ?? .unavailable
+        name = try container.decode(String.self, forKey: .name)
+        udid = try container.decode(String.self, forKey: .udid)
     }
     
     var dataReportDic: [String: String] {
